@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './SignUpForm.css';
@@ -30,19 +30,8 @@ const SignUpForm = () => {
     localStorage.setItem('passwordVisible', JSON.stringify(newVisibility));
   };
 
-  // const togglePasswordVisibility = () => {
-  //   setPasswordVisible(!passwordVisible);
-  // };
-
-  // useEffect(() => {
-  //   localStorage.setItem('passwordVisible', JSON.stringify(passwordVisible));
-  // }, [passwordVisible]);
-
-  
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("apretaste el form")
     axios.post(`${URL_BACK}/signup`, {
       email,
       password,
@@ -52,84 +41,22 @@ const SignUpForm = () => {
       address: address,
       description,
       is_admin: false,
-    }).then((response) =>{
+    }).then((response) => {
       console.log('Registro exitoso ahora puedes volver y loguearte');
-      setError(false);
+      setError('');
       setMsg('Registro exitoso ahora puedes volver y loguearte');
       navigate('/login');
     }).catch((error) => {
       console.error('Ocurrio un error:', error);
-      setError(true);
+      setError('Ocurrió un error al registrar, por favor intenta de nuevo.');
+      setMsg('');
     });
   }
-  //   const userData = {
-  //     email,
-  //     password,
-  //     name,
-  //     telephone: phone,
-  //     member_since: new Date(),
-  //     address: address,
-  //     description,
-  //     is_admin: false,
-  //   };
-
-  //   const response_post = await axios.post(`${URL_BACK}/users`,userData, {
-  //     headers: {
-  //       'Content-Type': 'aplication/json',
-  //     },
-  //   });
-
-  //   if (response_post.status === 201) {
-      
-  //   }
-
-
-
-  //   const config_post = {
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     method: 'post',
-  //     url: `${URL_BACK}/users`,
-  //     data: userData,
-  //   };
-
-  //   try {
-  //     const response_post = await axios(config_post);
-  //     if (response_post.status === 201) {
-  //       // Connexion après inscription
-  //       const config_login = {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         method: 'post',
-  //         url: `${URL_BACK}users/login`,
-  //         data: { email, password },
-  //       };
-
-  //       try {
-  //         const response_login = await axios(config_login);
-  //         if (response_login.status === 200) {
-  //           const { token } = response_login.data;
-  //           localStorage.setItem('token', token);
-  //           navigate('/mainpage');
-  //         } else {
-  //           setError('Erreur lors de la connexion après inscription');
-  //         }
-  //       } catch (error) {
-  //         setError(`Error ${error.response.status} en POST login`);
-  //         console.error('Error:', error);
-  //       }
-  //     }
-  //   } catch (error) {
-  //     setError(`Error ${error.response.status} en POST`);
-  //     console.error('Error:', error);
-  //   }
-  // };
 
   return (
     <form onSubmit={handleSubmit} className='container-signUPform'>
       {error && <div className="alert alert-danger">{error}</div>}
+      {msg && <div className="alert alert-success">{msg}</div>}
       <div className="input-group mb-3">
         <span className="input-group-text" id="basic-addon1">Name:</span>
         <input 
