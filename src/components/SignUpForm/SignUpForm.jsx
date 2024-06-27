@@ -32,7 +32,7 @@ const SignUpForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    axios.post(`${URL_BACK}/users/`, {
+    axios.post(`${URL_BACK}/signup`, {
       email,
       password,
       name,
