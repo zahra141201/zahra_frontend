@@ -17,7 +17,7 @@ function Profile() {
       }
 
       try {
-        const response = await axios.get(`${URL_BACK}/users/email/${userEmail}`, {
+        const response = await axios.get(`${URL_BACK}/users/${userEmail}`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json'
