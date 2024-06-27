@@ -17,7 +17,7 @@ function Profile() {
       }
 
       try {
-        const response = await axios.get(`${URL_BACK}users/email/${userEmail}`, {
+        const response = await axios.get(`${URL_BACK}/users/email/${userEmail}`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json'
@@ -50,7 +50,7 @@ function Profile() {
   const handleUploadClick = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.patch(`${URL_BACK}users/${user.id}`, updatedUser, {
+      const response = await axios.patch(`${URL_BACK}/users/${user.id}`, updatedUser, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
