@@ -1,0 +1,45 @@
+/* Profile.css */
+
+/* Ajusta la altura de la página completa */
+.landing-page {
+    min-height: 100vh;
+  
+    padding-top: 70px; /* Ajusta este valor según la altura de tu navbar */
+  }
+  
+  .mt-5 {
+    margin-top: 5rem !important;
+  }
+  
+  .user-info {
+    background-color: rgba(255, 255, 255, 0.8); /* Fond blanc semi-transparent */
+    padding: 20px;
+    border-radius: 15px; /* Coins arrondis */
+    display: inline-block; /* Afficher en bloc inline */
+  }
+  
+  .user-details p {
+    color: #333333; /* Color del texto */
+    margin-bottom: 10px;
+  }
+  
+  .user-details input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  h1 {
+    color: #ffffff; /* Color del título */
+    margin-bottom: 30px;
+  }
+  
+  p {
+    color: #333333; /* Color del texto del párrafo */
+  }
+  
+  button {
+    margin-top: 15px;
+  }

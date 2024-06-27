@@ -1,0 +1,24 @@
+.instruction-container {
+    padding: 20px;
+}
+
+.titles-section {
+    margin-left: 20px;
+}
+
+.title-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+
+.title-container:hover {
+    background-color: #f0f0f0; /* Cambia el color de fondo cuando se pasa el cursor sobre el elemento */
+    color: #333; /* Cambia el color del texto para que sea más legible */
+}
+.title-container h2 {
+    margin-right: 10px;
+}
+
+

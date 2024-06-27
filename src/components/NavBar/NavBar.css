@@ -1,0 +1,28 @@
+/* NavBar.css */
+
+/* Estilos para la barra de navegación */
+.navbar {
+  position: fixed; /* Hace que la navbar esté fija en la parte superior */
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 10; /* Asegura que la navbar esté sobre otros elementos */
+  background-color: #7B5049; /* Color sólido de fondo */
+  opacity: 0.5; /* Aplica transparencia a toda la navbar */
+}
+.navbar-nav .nav-link {
+  color: #ffffff; /* Cambia el color del texto a blanco */
+}
+
+.navbar::before {
+  content: ''; /* Este pseudo-elemento no es necesario si usamos solo opacity */
+}
+/* Estilos para la imagen del icono en la barra de navegación */
+/* Estilos para la imagen del icono en la barra de navegación */
+.icono_navbar {
+  width: 75px; /* Ajusta el ancho según tus necesidades */
+  height: auto; /* Mantiene la proporción de aspecto */
+  margin: 10px; /* Agrega un margen de 10px alrededor de la imagen */
+}
+
+

@@ -1,0 +1,17 @@
+.click-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ddd;
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: 1em;
+    text-align: center;
+}
+
+.click-circle.checked {
+    background-color: green; /* Cambiar el color de fondo cuando isChecked es true */
+}

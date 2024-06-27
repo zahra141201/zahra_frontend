@@ -1,0 +1,43 @@
+.night-mode-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.switch {
+    width: 40px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: #ccc;
+    position: relative;
+    margin-right: 10px;
+}
+
+.switch::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: white;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: transform 0.2s ease;
+}
+
+.night-mode-on .switch {
+    background-color: #555;
+}
+
+.night-mode-on .switch::after {
+    transform: translateX(20px);
+}
+
+.mode-label {
+    font-size: 16px;
+    margin-left: 5px; /* Agregar margen al texto */
+    color: white; /* Cambiar color del texto */
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro para el texto */
+    padding: 5px; /* Añadir relleno alrededor del texto */
+    border-radius: 5px; /* Añadir borde redondeado al fondo del texto */
+}

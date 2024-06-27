@@ -1,0 +1,182 @@
+/* Resetear estilos predeterminados del navegador */
+html, body, #root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Establecer la imagen como fondo */
+  body {
+    background-image: url('../../components/imagenes/frutas.png'); /* Ruta a la imagen de las frutas */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Fija el fondo para que no se desplace */
+  }
+  
+  /* Estilos para el contenido principal */
+  .landing-page {
+    height: 20vh; /* Ajustar la altura de la página completa */
+  }
+
+  .mt-5 {
+    background: transparent;
+    top: 0;
+
+  }
+  
+  
+  
+  .descripcion {
+    margin-bottom: 20px; /* Espacio entre la descripción y el borde inferior del contenedor */
+  }
+  
+  /* Estilos para el texto */
+  h1 {
+    color: #333333; /* Color del título */
+    margin: 100px auto;
+    background: transparent;
+  }
+  
+  p {
+    color: #FFFFFF; /* Color del texto del párrafo */
+  }
+  
+  /* Estilos para la imagen del icono en la barra de navegación */
+  img.icono {
+    width: 200px; /* Ajusta el ancho según tus necesidades */
+    height: auto; /* Mantiene la proporción de aspecto */
+  }
+  
+  .card1, .card2, .card3 {
+    position: relative;
+    width: 100%; /* Ajuste la anchura para que ocupe toda la columna */
+    max-width: 220px; /* Ajuste la largeur maximale si nécessaire */
+    height: 320px;
+    background: #7b5049;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    font-weight: bold;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 10px auto; /* Centrer les cartes et ajouter un espace entre elles */
+  }
+  
+  .card1 img, .card2 img, .card3 img {
+    width: 100%;
+    height: 200px; /* Vous pouvez ajuster cette valeur selon vos besoins */
+    object-fit: cover; /* Assure que l'image remplit l'espace défini tout en gardant son aspect ratio */
+    border-radius: 4px;
+  }
+  
+  .card1::before, .card1::after,
+  .card2::before, .card2::after,
+  .card3::before, .card3::after {
+    position: absolute;
+    content: "";
+    width: 20%;
+    height: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    font-weight: bold;
+    background-color: #ffe88c;
+    transition: all 1s;
+  }
+  
+  .card1::before {
+    top: 0;
+    right: 0;
+    border-radius: 0 15px 0 100%;
+  }
+  
+  .card1::after {
+    bottom: 0;
+    left: 0;
+    border-radius: 0 100% 0 15px;
+  }
+  
+  .card2::before {
+    top: 0;
+    right: 0;
+    border-radius: 0 15px 0 100%;
+  }
+  
+  .card2::after {
+    bottom: 0;
+    left: 0;
+    border-radius: 0 100% 0 15px;
+  }
+  
+  .card3::before {
+    top: 0;
+    right: 0;
+    border-radius: 0 15px 0 100%;
+  }
+  
+  .card3::after {
+    bottom: 0;
+    left: 0;
+    border-radius: 0 100% 0 15px;
+  }
+
+
+  
+  
+  .card1:hover::before,
+  .card1:hover::after,
+  .card2:hover::before,
+  .card2:hover::after,
+  .card3:hover::before,
+  .card3:hover::after {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    transition: all 0.5s;
+  }
+  
+  .card1:hover::after {
+    content: "Estudiante de cuarto año de ingeniería civil en computación de la PUC, me gusta estar con mis mascotas y resolver cubos Rubik, tejer a crochet y la investigación genealógica";
+    text-align: justify;
+    padding: 10px;
+    font-size: 18px;
+  }
+  
+  
+  .card2:hover::after {
+    content: "Estudiante de quinto año de ingeniería civil industrial de la PUC, me gusta ver series, salir con amigos y viajar";
+    text-align: justify;
+    padding: 10px;
+    font-size: 18px;
+  }
+
+  .card3:hover::after {
+    content: "Soy un estudiante de intercambio internacional, procedente de Francia. Estoy muy interesado en la investigación biotecnológica.";
+    text-align: justify;
+    padding: 10px;
+    font-size: 18px;
+  }
+  
+  .card1, .card2 {
+    margin-right: 100px;
+  }
+
+  h1 {
+    color: #333333;
+    margin: 100px auto;
+    background: transparent;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}

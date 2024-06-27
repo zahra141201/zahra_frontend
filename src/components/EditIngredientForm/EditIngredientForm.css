@@ -1,0 +1,35 @@
+.container-signUPform {
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #ffffff;
+    max-width: 600px;
+}
+
+.input-group-text {
+    background-color: #546950; /* Color de fondo del texto del grupo de entrada */
+    color: white; /* Color del texto del grupo de entrada */
+}
+
+/* Estilos para el botón */
+.btn-custom {
+    background-color: #546950; 
+    color: #ffffff; 
+    border-color: #ffffff; 
+}
+
+.btn-custom:hover {
+    background-color: #3e6935; 
+    color: #ffffff;
+    border-color: #000000; 
+}
+
+.form-control:hover {
+    border-color: #3e6935;
+    background-color: #f0f5f0;
+}
+
+.container-signUPform, .form-control, .btn-custom {
+    transition: all 0.3s ease;
+}

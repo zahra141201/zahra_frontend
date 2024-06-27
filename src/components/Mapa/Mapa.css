@@ -1,0 +1,9 @@
+.map-container {
+    margin: 20px auto 0; /* Centra horizontalmente y agrega margen arriba */
+    display: block;
+    max-width: 600px;
+    width: 100%;
+    height: 200px;
+  }
+  
+  
