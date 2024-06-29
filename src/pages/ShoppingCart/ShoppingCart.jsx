@@ -4,7 +4,7 @@ import './ShoppingCart.css';
 import NavBar2 from '../../components/NavBar2/NavBar2';
 import axios from 'axios';
 import URL_BACK from '../../../config';
-import ShoppingCard from '../../components/ShoppingCard/ShoppingCard'; // Assure-toi que le chemin et le nom du fichier sont corrects
+import './ShoppingCard.css'; // Assure-toi que le chemin du fichier CSS est correct
 
 function ShoppingCart() {
     const navigate = useNavigate();
@@ -64,11 +64,22 @@ function ShoppingCart() {
                             <p>FRIDGE'S {email}</p>
                             <div className="d-flex justify-content-around flex-wrap">
                                 {userIngredients.map((ingredient, index) => (
-                                    <div key={index} className='shopping-card'> 
-                                        <ShoppingCard
-                                            ingredient={ingredient}
-                                            key={ingredient.id} 
-                                        />
+                                    <div key={index} className='shopping-card'>
+                                        <img src={ingredient.imageUrl} alt={ingredient.name} className='ingredient-image' />
+                                        <div className='ingredient-info'>
+                                            <div>
+                                                <h3 className='ingredient-name'>{ingredient.name}</h3>
+                                                <p className='ingredient-weight'>{ingredient.weight}</p>
+                                                <p className='ingredient-expiration'>{ingredient.expiration_date}</p>
+                                                <p className='ingredient-bought-date'>{ingredient.bought_date}</p>
+                                                <p className='ingredient-price'>${ingredient.price}</p>
+                                                <p className='ingredient-description'>{ingredient.description}</p>
+                                            </div>
+                                            <div className='request-info'>
+                                                <h4>Request Info:</h4>
+                                                {/* Ajoute ici la logique pour récupérer et afficher les informations de demande */}
+                                            </div>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
