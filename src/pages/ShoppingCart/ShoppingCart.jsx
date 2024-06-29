@@ -4,7 +4,7 @@ import './ShoppingCart.css';
 import NavBar2 from '../../components/NavBar2/NavBar2';
 import axios from 'axios';
 import URL_BACK from '../../../config';
-import ShoppingCard from '../../components/ShoppingCard/ShoppingCard';
+import ShoppingCard from '../../components/ShoppingCard/ShoppingCard'; // Assure-toi que le chemin et le nom du fichier sont corrects
 
 function ShoppingCart() {
     const navigate = useNavigate();
@@ -14,10 +14,10 @@ function ShoppingCart() {
 
     useEffect(() => {
         const fetchUserEmail = async () => {
-            const userEmail = localStorage.getItem('email'); // Obtener el email del usuario logueado
+            const userEmail = localStorage.getItem('email');
             if (userEmail) {
                 setEmail(userEmail);
-                fetchRequests(userEmail); // Llamar a la función para obtener las requests del usuario
+                fetchRequests(userEmail);
             }
         };
         fetchUserEmail();
@@ -28,16 +28,16 @@ function ShoppingCart() {
             const response = await axios.get(`${URL_BACK}/requests/user/${userEmail}`);
             const requests = response.data;
 
-            // Collecter les ingrédients associés aux demandes
             const ingredientPromises = requests.map(async (request) => {
                 const ingredientResponse = await axios.get(`${URL_BACK}/ingredientes/${request.id_ingrediente}`);
                 return ingredientResponse.data;
             });
 
-            // Attendre que toutes les requêtes pour les ingrédients soient résolues
             const ingredients = await Promise.all(ingredientPromises);
             setUserIngredients(ingredients);
             setLoading(false);
+
+            alert('User Ingredients: ' + JSON.stringify(ingredients)); // Alert pour vérifier les données d'ingrédients récupérées
         } catch (error) {
             console.error('Error fetching requests and ingredients:', error);
             alert('Error fetching requests and ingredients:', error.message);
