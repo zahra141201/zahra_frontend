@@ -96,7 +96,7 @@ function Profile() {
                     </p>
                     <p>
                       <strong>Address:</strong>
-                      <input type="text" name="adress" value={updatedUser.adress} onChange={handleInputChange} />
+                      <input type="text" name="address" value={updatedUser.address} onChange={handleInputChange} />
                     </p>
                     <p>
                       <strong>Description:</strong>
@@ -113,7 +113,7 @@ function Profile() {
                     <p><strong>Name:</strong> {user.name}</p>
                     <p><strong>Telephone:</strong> {user.telephone}</p>
                     <p><strong>Member Since:</strong> {new Date(user.member_since).toLocaleDateString()}</p>
-                    <p><strong>Address:</strong> {user.adress}</p>
+                    <p><strong>Address:</strong> {user.address}</p>
                     <p><strong>Description:</strong> {user.description}</p>
                     <p><strong>Admin:</strong> {user.is_admin ? 'Yes' : 'No'}</p>
                     <button onClick={handleModifyClick} className="btn btn-secondary">Modify</button>
