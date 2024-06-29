@@ -140,7 +140,7 @@ function MyFridgePage() {
                                             />
                                         )}
                                         <div className="requests">
-                                            {ingredientRequests[ingredient.id] && ingredientRequests[ingredient.id].map(request => (
+                                            {ingredientRequests[ingredient.id] && ingredientRequests[ingredient.id].filter(request => request.state !== 'refused').map(request => (
                                                 <div key={request.id} className="request">
                                                     <p>{`Request: ${request.id}, Status: ${request.state}`}</p>
                                                     {request.state === 'pending' && (
@@ -148,6 +148,9 @@ function MyFridgePage() {
                                                             <button onClick={() => handleUpdateRequestStatus(ingredient.id, request.id, 'accepted')}>Accept</button>
                                                             <button onClick={() => handleUpdateRequestStatus(ingredient.id, request.id, 'refused')}>Refuse</button>
                                                         </>
+                                                    )}
+                                                    {request.state === 'accepted' && (
+                                                        <button onClick={() => handleUpdateRequestStatus(ingredient.id, request.id, 'refused')}>Refuse</button>
                                                     )}
                                                 </div>
                                             ))}
