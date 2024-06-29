@@ -13,29 +13,15 @@ const MainPage = () => {
     const location = useLocation();
     const email = location.state?.email || ''; // Obtener el email del estado de navegación
 
-    const [showFruits, setShowFruits] = useState(() => {
-        const storedValue = localStorage.getItem('showFruits');
-        return storedValue ? JSON.parse(storedValue) : true;
-    });
-    const [showVegetables, setShowVegetables] = useState(() => {
-        const storedValue = localStorage.getItem('showVegetables');
-        return storedValue ? JSON.parse(storedValue) : true;
-    });
 
     const [nightMode, setNightMode] = useState(() => {
         const storedValue = localStorage.getItem('nightMode');
         return storedValue ? JSON.parse(storedValue) : false;
     });
 
-    const [searchResults, setSearchResults] = useState([]);
-    
-    const toggleShowFruits = () => {
-        setShowFruits(!showFruits);
-    };
 
-    const toggleShowVegetables = () => {
-        setShowVegetables(!showVegetables);
-    };
+    
+
 
     const toggleNightMode = () => {
         const newNightMode = !nightMode;
@@ -43,13 +29,7 @@ const MainPage = () => {
         localStorage.setItem('nightMode', JSON.stringify(newNightMode));
     };
 
-    useEffect(() => {
-        localStorage.setItem('showFruits', JSON.stringify(showFruits));
-    }, [showFruits]);
-
-    useEffect(() => {
-        localStorage.setItem('showVegetables', JSON.stringify(showVegetables));
-    }, [showVegetables]);
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -85,21 +65,15 @@ const MainPage = () => {
         fetchData();
     }, []);
 
-    const shouldShowResult = (result) => {
-        return (
-            (showFruits && result.productos.some(product => ["manzana", "naranjas", "piña", "limones", "peras", "uvas", "sandía", "frutillas"].includes(product))) ||
-            (showVegetables && result.productos.some(product => ["zanahoria", "brocoli", "rabano", "papas", "tomates", "cebollas", "espinacas", "pepinos"].includes(product)))
-        );
-    };
+    
 
-    const filteredResults = searchResults.filter(result => shouldShowResult(result));
+   
 
     return (
         <div className={nightMode ? "dark-mode" : ""}>
             <NavBar2 />
             <h1>¡Bienvenido {email}!</h1> {/* Mostrar el mensaje de bienvenida */}
             <div className="d-flex justify-content-center align-items-start">
-                <SwitchBox showFruits={showFruits} showVegetables={showVegetables} toggleShowFruits={toggleShowFruits} toggleShowVegetables={toggleShowVegetables} />
                 <NightMode nightMode={nightMode} toggleNightMode={toggleNightMode} />
                 <Mapa height="200px" width="300px" className="Mapa" />
                 <div className="search-container">
