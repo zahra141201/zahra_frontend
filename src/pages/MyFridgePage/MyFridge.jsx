@@ -85,13 +85,23 @@ function MyFridgePage() {
     };
 
     const handleUpdateRequestStatus = async (ingredientId, requestId, status) => {
+        const request = ingredientRequests[ingredientId].find(req => req.id === requestId);
+        
+        if (!request) {
+            console.error('Request not found');
+            return;
+        }
+
         try {
-            await axios.patch(`${URL_BACK}/requests/ingredient/${ingredientId}`, {
-                requestId,
-                status
-            });
-            const updatedRequests = ingredientRequests[ingredientId].map(request =>
-                request.id === requestId ? { ...request, state: status } : request
+            const updatedRequest = {
+                ...request,
+                state: status
+            };
+            
+            await axios.patch(`${URL_BACK}/requests/ingredient/${ingredientId}`, updatedRequest);
+
+            const updatedRequests = ingredientRequests[ingredientId].map(req =>
+                req.id === requestId ? { ...req, state: status } : req
             );
             setIngredientRequests(prevState => ({
                 ...prevState,
