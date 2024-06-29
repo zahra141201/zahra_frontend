@@ -11,6 +11,7 @@ const ShoppingCard = ({ ingredient }) => {
         const fetchRequestInfo = async () => {
             try {
                 const response = await axios.get(`${URL_BACK}/requests/ingredient/${ingredient.id}`);
+                alert('User request: ' + JSON.stringify(response));
                 if (response.data.length > 0) {
                     setRequestInfo(response.data[0]); // Utilise la première demande (si elle existe) pour simplifier l'affichage
                 }
