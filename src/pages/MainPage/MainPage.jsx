@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useNavigate } from 'react-router-dom'; // Utilisation de useNavigate pour v6
 import './MainPage.css'; 
 import NavBar2 from '../../components/NavBar2/NavBar2';
 import Mapa from '../../components/Mapa/Mapa';
@@ -12,7 +11,7 @@ import URL_BACK from '../../../config';
 const MainPage = () => {
     const location = useLocation();
     const email = location.state?.email || '';
-    const navigate = useNavigate(); // Utilisation de useNavigate pour v6
+    const history = useHistory();
 
     const [nightMode, setNightMode] = useState(() => {
         const storedValue = localStorage.getItem('nightMode');
@@ -33,25 +32,22 @@ const MainPage = () => {
                 const [usersResponse, ingredientsResponse] = await Promise.all([
                     axios.get(`${URL_BACK}/users`, {
                         headers: {
-                          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                          'Content-Type': 'application/json'
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                            'Content-Type': 'application/json'
                         }
-                      }),
+                    }),
                     axios.get(`${URL_BACK}/ingredientes`)
                 ]);
 
                 const users = usersResponse.data;
                 const ingredients = ingredientsResponse.data;
 
-                // Associer les ingrédients aux utilisateurs
-                const results = users.map(user => {
-                    return {
-                        name: user.name,
-                        direccion: user.address,
-                        productos: ingredients.filter(ingredient => ingredient.owner === user.email).map(ingredient => ingredient.name),
-                        email: user.email
-                    };
-                });
+                const results = users.map(user => ({
+                    name: user.name,
+                    direccion: user.address,
+                    productos: ingredients.filter(ingredient => ingredient.owner === user.email).map(ingredient => ingredient.name),
+                    email: user.email
+                }));
 
                 setSearchResults(results);
             } catch (error) {
@@ -63,7 +59,7 @@ const MainPage = () => {
     }, []);
 
     const handleProfileClick = (email) => {
-        navigate('/OtherPage', { state: { email } }); // Utilisation de navigate pour la navigation en v6
+        history.push('/OtherPage', { state: { email } });
     };
 
     return (
@@ -87,7 +83,9 @@ const MainPage = () => {
                             <tbody>
                                 {searchResults.map((result, index) => (
                                     <tr key={index}>
-                                        <td>{result.name}</td>
+                                        <td onClick={() => handleProfileClick(result.email)} style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue' }}>
+                                            {result.name}
+                                        </td>
                                         <td>{result.direccion}</td>
                                         <td>{result.productos.join(', ')}</td>
                                         <td>
