@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import './OtherFridge.css';
 import NavBar2 from '../../components/NavBar2/NavBar2';
 import axios from 'axios';
@@ -7,21 +7,20 @@ import URL_BACK from '../../../config';
 import IngredientCard from '../../components/IngredientCard/IngredientCard';
 
 function OtherFridge() {
-    const navigate = useNavigate();
-    const location = useLocation(); // Utilisation de useLocation pour accéder à la localisation actuelle
+    const location = useLocation();
     const [email, setEmail] = useState('');
     const [userIngredients, setUserIngredients] = useState([]);
 
     useEffect(() => {
         const fetchUserEmail = async () => {
-            const userEmail = location.state?.email; // Récupération de l'email depuis location.state
+            const userEmail = location.state?.email;
             if (userEmail) {
                 setEmail(userEmail);
                 fetchIngredients(userEmail);
             }
         };
         fetchUserEmail();
-    }, [location]); // Ajout de location comme dépendance pour que useEffect se déclenche à chaque changement de localisation
+    }, [location]);
 
     const fetchIngredients = async (userEmail) => {
         try {
@@ -37,10 +36,6 @@ function OtherFridge() {
         }
     };
 
-    const handleAddIngredient = () => {
-        navigate('/addingredient');
-    };
-
     return (
         <div className='container-fluid p-0 landing-page'>
             <NavBar2 />
@@ -48,7 +43,6 @@ function OtherFridge() {
                 <div className="row justify-content-center align-items-center">
                     <div className="col text-center">
                         <h1 className="mt-5">My Fridge</h1>
-                        <button onClick={handleAddIngredient} className="btn-add">Add</button>
                         <div className="mt-4">
                             <p>FRIDGE'S {email}</p>
                             <div className="d-flex justify-content-around flex-wrap">
