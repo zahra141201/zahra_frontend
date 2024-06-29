@@ -86,9 +86,6 @@ const NavBar2 = () => {
             <Link to="/valorationspage" className="nav-link">See Ranking</Link>
           </li>
           <li className="nav-item">
-            <Link to="/addingredient" className="nav-link">Add Ingredient</Link>
-          </li>
-          <li className="nav-item">
             <a className="nav-link" href="/" onClick={handleLogoutClick}>Log out</a>
           </li>
         </ul>

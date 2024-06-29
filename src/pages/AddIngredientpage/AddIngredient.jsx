@@ -6,7 +6,7 @@ import NavBar from '../../components/NavBar/NavBar';
 const SignUp = () => {
     return (
         <div>
-            <NavBar />
+            <NavBar2/>
             <AddIngredientForm />
         </div>
     );

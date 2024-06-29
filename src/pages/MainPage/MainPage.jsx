@@ -7,6 +7,8 @@ import Mapa from '../../components/Mapa/Mapa';
 import SearchCard from '../../components/SearchCard/SearchCard';
 import SwitchBox from '../../components/SwitchBox/SwitchBox';
 import NightMode from '../../components/NightMode/NightMode'; 
+import axios from 'axios';
+import URL_BACK from '../../../config';
 
 const MainPage = () => {
     const location = useLocation();
@@ -26,6 +28,8 @@ const MainPage = () => {
         return storedValue ? JSON.parse(storedValue) : false;
     });
 
+    const [searchResults, setSearchResults] = useState([]);
+    
     const toggleShowFruits = () => {
         setShowFruits(!showFruits);
     };
@@ -48,14 +52,34 @@ const MainPage = () => {
         localStorage.setItem('showVegetables', JSON.stringify(showVegetables));
     }, [showVegetables]);
 
-    const searchResults = [
-        { name: "Lea Renault", direccion: "717 Francisco Bilbao, Providencia", productos: ["zanahoria", "brocoli", "tomates"] },
-        { name: "Marjolaine Tillet", direccion: "53 Manuel Montt, Providencia", productos: ["manzana", "piña", "naranjas"] },
-        { name: "Martin Ribaut", direccion: "1342 Carlos Wilson, Providencia", productos: ["limones", "uvas", "rabano"] },
-        { name: "Lucas Duval", direccion: "926 Suecia, Providencia", productos: ["peras", "papas"] },
-        { name: "Sophie Lambert", direccion: "1015 Vitacura, Vitacura", productos: ["sandía", "tomates", "cebollas"] },
-        { name: "Claire Lecomte", direccion: "1922 Providencia, Providencia", productos: ["frutillas", "espinacas", "pepinos"] },
-    ];
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [usersResponse, ingredientsResponse] = await Promise.all([
+                    axios.get(`${URL_BACK}/users`),
+                    axios.get(`${URL_BACK}/ingredients`)
+                ]);
+
+                const users = usersResponse.data;
+                const ingredients = ingredientsResponse.data;
+
+                // Associer les ingrédients aux utilisateurs
+                const results = users.map(user => {
+                    return {
+                        name: user.name,
+                        direccion: user.address, // Assurez-vous que le champ adresse est correct
+                        productos: ingredients.filter(ingredient => ingredient.userId === user.id).map(ingredient => ingredient.name)
+                    };
+                });
+
+                setSearchResults(results);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const shouldShowResult = (result) => {
         return (
