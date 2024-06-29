@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './OtherFridge.css';
 import NavBar2 from '../../components/NavBar2/NavBar2';
 import axios from 'axios';
@@ -8,19 +8,20 @@ import IngredientCard from '../../components/IngredientCard/IngredientCard';
 
 function OtherFridge() {
     const navigate = useNavigate();
+    const location = useLocation(); // Utilisation de useLocation pour accéder à la localisation actuelle
     const [email, setEmail] = useState('');
     const [userIngredients, setUserIngredients] = useState([]);
 
     useEffect(() => {
         const fetchUserEmail = async () => {
-            const userEmail = location.state?.email;
+            const userEmail = location.state?.email; // Récupération de l'email depuis location.state
             if (userEmail) {
                 setEmail(userEmail);
                 fetchIngredients(userEmail);
             }
         };
         fetchUserEmail();
-    }, []);
+    }, [location]); // Ajout de location comme dépendance pour que useEffect se déclenche à chaque changement de localisation
 
     const fetchIngredients = async (userEmail) => {
         try {
