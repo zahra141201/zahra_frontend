@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom'; // Utilisation de useLocation
+import { useLocation, useHistory } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MainPage.css'; 
 import NavBar2 from '../../components/NavBar2/NavBar2';
@@ -60,6 +60,12 @@ const MainPage = () => {
         fetchData();
     }, []);
 
+    const handleProfileClick = (email) => {
+        navigate('/OtherPage', { state: { email } });
+    };
+
+
+
     return (
         <div className={nightMode ? "dark-mode" : ""}>
             <NavBar2 />
@@ -85,9 +91,7 @@ const MainPage = () => {
                                         <td>{result.direccion}</td>
                                         <td>{result.productos.join(', ')}</td>
                                         <td>
-                                            <Link to={{ pathname: '/OtherPage', state: { email: result.email } }}>
-                                                <button className="btn btn-primary">Voir le profil</button>
-                                            </Link>
+                                            <button className="btn btn-primary" onClick={() => handleProfileClick(result.email)}>Voir le profil</button>
                                         </td>
                                     </tr>
                                 ))}
