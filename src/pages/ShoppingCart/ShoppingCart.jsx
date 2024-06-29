@@ -5,7 +5,6 @@ import NavBar2 from '../../components/NavBar2/NavBar2';
 import axios from 'axios';
 import URL_BACK from '../../../config';
 
-
 function ShoppingCart() {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
@@ -30,14 +29,19 @@ function ShoppingCart() {
 
             const ingredientPromises = requests.map(async (request) => {
                 const ingredientResponse = await axios.get(`${URL_BACK}/ingredientes/${request.id_ingrediente}`);
-                return ingredientResponse.data;
+                const ingredient = ingredientResponse.data;
+
+                // Fetch request info
+                const requestInfoResponse = await axios.get(`${URL_BACK}/requests/${request.id}`); // Adjust endpoint according to your API
+                const requestInfo = requestInfoResponse.data;
+
+                // Combine ingredient and request info
+                return { ...ingredient, requestInfo };
             });
 
             const ingredients = await Promise.all(ingredientPromises);
             setUserIngredients(ingredients);
             setLoading(false);
-
-            alert('User Ingredients: ' + JSON.stringify(ingredients)); // Vérifie les données d'ingrédients récupérées
         } catch (error) {
             console.error('Error fetching requests and ingredients:', error);
             alert('Error fetching requests and ingredients:', error.message);
@@ -77,7 +81,9 @@ function ShoppingCart() {
                                             </div>
                                             <div className='request-info'>
                                                 <h4>Request Info:</h4>
-                                                {/* Ajoute ici la logique pour récupérer et afficher les informations de demande */}
+                                                <p><strong>Status:</strong> {ingredient.requestInfo ? ingredient.requestInfo.state : 'N/A'}</p>
+                                                <p><strong>Pick-up Date:</strong> {ingredient.requestInfo ? ingredient.requestInfo.pick_up_date : 'N/A'}</p>
+                                                {/* Afficher d'autres détails de la demande si nécessaire */}
                                             </div>
                                         </div>
                                     </div>
