@@ -10,6 +10,7 @@ import MyFridgePage from './pages/MyFridgePage/MyFridge';
 import AddIngredientPage from './pages/AddIngredientpage/AddIngredient'
 import Valorationpage from './pages/ValorationPage/ValorationPage';
 import protected_UserCheck from './protected/UserCheck'
+import OtherPage from './pages/OtherPage/OtherPage';
 function Router(){
   return (
     <BrowserRouter>
@@ -24,6 +25,7 @@ function Router(){
         <Route path={"/MyFridge"} element={<MyFridgePage />}/>
         <Route path={"/valorationspage"} element={<Valorationpage />}/>
         <Route path={"/AddIngredient"} element={<AddIngredientPage />}/>
+        <Route path={"/OtherPage"} element={<OtherPage />}/>
       </Routes>
     </BrowserRouter>
   )

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MainPage.css'; 
 import NavBar2 from '../../components/NavBar2/NavBar2';
@@ -10,6 +10,7 @@ import URL_BACK from '../../../config';
 
 const MainPage = () => {
     const location = useLocation();
+    const history = useHistory();
     const email = location.state?.email || ''; // Obtener el email del estado de navegación
 
     const [nightMode, setNightMode] = useState(() => {
@@ -46,7 +47,8 @@ const MainPage = () => {
                     return {
                         name: user.name,
                         direccion: user.address, // Assurez-vous que le champ adresse est correct
-                        productos: ingredients.filter(ingredient => ingredient.owner === user.email).map(ingredient => ingredient.name)
+                        productos: ingredients.filter(ingredient => ingredient.owner === user.email).map(ingredient => ingredient.name),
+                        email: user.email // Ajouter l'email de l'utilisateur
                     };
                 });
 
@@ -59,21 +61,29 @@ const MainPage = () => {
         fetchData();
     }, []);
 
+    const handleProfileClick = (email) => {
+        history.push({
+            pathname: '/profile',
+            state: { email }
+        });
+    };
+
     return (
         <div className={nightMode ? "dark-mode" : ""}>
             <NavBar2 />
-            <h1>¡Bienvenido {email}!</h1> {/* Mostrar el mensaje de bienvenida */}
+            <h1>¡Bienvenido {email}!</h1>
             <div className="d-flex justify-content-center align-items-start">
                 <NightMode nightMode={nightMode} toggleNightMode={toggleNightMode} />
                 <Mapa height="200px" width="300px" className="Mapa" />
                 <div className="search-container">
-                    <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" className="scrollspy-example bg-body-tertiary p-3 rounded-2" tabIndex="0">
+                    <div className="scrollspy-example bg-body-tertiary p-3 rounded-2" tabIndex="0">
                         <table className="table table-striped">
                             <thead>
                                 <tr>
                                     <th>Nom</th>
                                     <th>Adresse</th>
                                     <th>Produits</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -82,6 +92,9 @@ const MainPage = () => {
                                         <td>{result.name}</td>
                                         <td>{result.direccion}</td>
                                         <td>{result.productos.join(', ')}</td>
+                                        <td>
+                                            <button className="btn btn-primary" onClick={() => handleProfileClick(result.email)}>Voir le profil</button>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
