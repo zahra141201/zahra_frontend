@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import URL_BACK from '../../../config';
 import NavBar2 from '../../components/NavBar2/NavBar2';
@@ -6,10 +7,10 @@ import './OtherPage.css'; // Supposant que vous avez du CSS pour le style
 
 function OtherProfile() {
   const [user, setUser] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
     const fetchUser = async () => {
-      const location = useLocation();
       const userEmail = location.state?.email;
       if (!userEmail) {
         return;
@@ -34,7 +35,7 @@ function OtherProfile() {
     };
 
     fetchUser();
-  }, []);
+  }, [location.state?.email]);
 
   return (
     <div className='container-fluid p-0 landing-page'>

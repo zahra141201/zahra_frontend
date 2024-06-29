@@ -11,7 +11,7 @@ import URL_BACK from '../../../config';
 const MainPage = () => {
     const location = useLocation();
     const history = useHistory();
-    const email = location.state?.email || ''; // Obtener el email del estado de navegación
+    const email = location.state?.email || '';
 
     const [nightMode, setNightMode] = useState(() => {
         const storedValue = localStorage.getItem('nightMode');
@@ -46,9 +46,9 @@ const MainPage = () => {
                 const results = users.map(user => {
                     return {
                         name: user.name,
-                        direccion: user.address, // Assurez-vous que le champ adresse est correct
+                        direccion: user.address,
                         productos: ingredients.filter(ingredient => ingredient.owner === user.email).map(ingredient => ingredient.name),
-                        email: user.email // Ajouter l'email de l'utilisateur
+                        email: user.email
                     };
                 });
 
@@ -63,7 +63,7 @@ const MainPage = () => {
 
     const handleProfileClick = (email) => {
         history.push({
-            pathname: '/profile',
+            pathname: '/OtherPage',
             state: { email }
         });
     };
