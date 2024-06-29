@@ -51,6 +51,9 @@ const OtherIngredient = ({ ingredient }) => {
         }
     };
 
+    // Vérifier si une demande avec un statut "accepted" existe
+    const hasAcceptedRequest = requests.some(request => request.state === 'accepted');
+
     return (
         <div className='ingredient-card'>
             <img src={ingredient.imageUrl} alt={ingredient.name} className='ingredient-image' />
@@ -63,7 +66,7 @@ const OtherIngredient = ({ ingredient }) => {
                     <p className='ingredient-price'>${ingredient.price}</p>
                     <p className='ingredient-description'>{ingredient.description}</p>
                 </div>
-                {showRequestForm ? (
+                {showRequestForm && !hasAcceptedRequest ? (
                     <form onSubmit={handleSubmitRequest}>
                         <label htmlFor='pickUpDate'>Pick-up Date:</label>
                         <input
@@ -86,7 +89,7 @@ const OtherIngredient = ({ ingredient }) => {
                     </form>
                 ) : (
                     <div>
-                        <button onClick={handleMakeRequest}>Make a Request</button>
+                        {!hasAcceptedRequest && <button onClick={handleMakeRequest}>Make a Request</button>}
                         {requests.length > 0 && (
                             <div className='request-info'>
                                 <h4>Requests:</h4>

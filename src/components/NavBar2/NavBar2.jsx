@@ -77,7 +77,7 @@ const NavBar2 = () => {
             <Link to="/MyFridge" className="nav-link">MyFridge</Link>
           </li>
           <li className="nav-item">
-            <Link to="/mainpage" className="nav-link">Your Shopping Cart</Link>
+            <Link to="/ShoppingCart" className="nav-link">Your Shopping Cart</Link>
           </li>
           <li className="nav-item">
             <Link to="/Profile" className="nav-link">My Profile</Link>

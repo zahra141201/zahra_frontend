@@ -1,0 +1,78 @@
+/* Resetear estilos predeterminados del navegador */
+html, body, #root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Establecer la imagen como fondo */
+  body {
+    background-image: url('../../components/imagenes/frutas.png'); /* Ruta a la imagen de las frutas */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Fija el fondo para que no se desplace */
+  }
+  
+  /* Estilos para el contenido principal */
+  .landing-page {
+    height: auto; /* Ajustar la altura de acuerdo al contenido */
+    padding-top: 100px; /* Agregar espacio superior para el navbar */
+  }
+  
+  /* Estilos para el texto */
+  h1 {
+    color: #333333; /* Color del título */
+    margin: 20px auto; /* Ajustar margen para el título */
+  }
+  
+  p {
+    color: #FFFFFF; /* Color del texto del párrafo */
+  }
+  
+  /* Estilos para la imagen del icono en la barra de navegación */
+  img.icono {
+    width: 200px; /* Ajusta el ancho según tus necesidades */
+    height: auto; /* Mantiene la proporción de aspecto */
+  }
+  
+  /* Estilos para las tarjetas de ingredientes */
+  .ingredient-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 15px;
+    padding: 20px;
+    width: 300px;
+    text-align: left;
+  }
+  
+  .ingredient-image {
+    width: 100%;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .ingredient-info {
+    padding: 15px;
+  }
+  
+  .ingredient-name {
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+  
+  
+  .ingredient-weight,
+  .ingredient-expiration,
+  .ingredient-bought-date,
+  .ingredient-price,
+  .ingredient-description {
+    margin: 5px 0;
+    color: #000000; /* Couleur du texte en noir */
+  }
+  
+  
+  .ingredient-price {
+    font-size: 1.2em;
+    color: #28a745;
+  }

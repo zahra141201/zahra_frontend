@@ -12,6 +12,7 @@ import Valorationpage from './pages/ValorationPage/ValorationPage';
 import protected_UserCheck from './protected/UserCheck'
 import OtherPage from './pages/OtherPage/OtherPage';
 import OtherFridge from './pages/OtherFridge/OtherFridge';
+import ShoppingCart from './pages/ShoppingCart/ShoppingCart';
 function Router(){
   return (
     <BrowserRouter>
@@ -28,6 +29,7 @@ function Router(){
         <Route path={"/AddIngredient"} element={<AddIngredientPage />}/>
         <Route path={"/OtherPage"} element={<OtherPage />}/>
         <Route path={"/OtherFridge"} element={<OtherFridge />}/>
+        <Route path={"/ShoppingCart"} element={<ShoppingCart />}/>
       </Routes>
     </BrowserRouter>
   )
