@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import URL_BACK from '../../../config';
 import NavBar2 from '../../components/NavBar2/NavBar2';
-import './OtherPage.css'; // Supposant que vous avez du CSS pour le style
+import './OtherPage.css'; // Assurez-vous d'avoir votre fichier CSS pour le style
 
 function OtherProfile() {
   const [user, setUser] = useState(null);
@@ -56,7 +56,7 @@ function OtherProfile() {
                   <p><strong>Admin:</strong> {user.is_admin ? 'Yes' : 'No'}</p>
                 </div>
               ) : (
-                <div>Log in to see your profile!</div>
+                <div>Loading user data...</div>
               )}
             </div>
           </div>
