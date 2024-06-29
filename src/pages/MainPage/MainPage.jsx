@@ -4,7 +4,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './MainPage.css'; 
 import NavBar2 from '../../components/NavBar2/NavBar2';
 import Mapa from '../../components/Mapa/Mapa';
-import SwitchBox from '../../components/SwitchBox/SwitchBox';
 import NightMode from '../../components/NightMode/NightMode'; 
 import axios from 'axios';
 import URL_BACK from '../../../config';
@@ -13,23 +12,18 @@ const MainPage = () => {
     const location = useLocation();
     const email = location.state?.email || ''; // Obtener el email del estado de navegación
 
-
     const [nightMode, setNightMode] = useState(() => {
         const storedValue = localStorage.getItem('nightMode');
         return storedValue ? JSON.parse(storedValue) : false;
     });
 
-
-    
-
+    const [searchResults, setSearchResults] = useState([]);
 
     const toggleNightMode = () => {
         const newNightMode = !nightMode;
         setNightMode(newNightMode);
         localStorage.setItem('nightMode', JSON.stringify(newNightMode));
     };
-
-    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -65,10 +59,6 @@ const MainPage = () => {
         fetchData();
     }, []);
 
-    
-
-   
-
     return (
         <div className={nightMode ? "dark-mode" : ""}>
             <NavBar2 />
@@ -87,7 +77,7 @@ const MainPage = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredResults.map((result, index) => (
+                                {searchResults.map((result, index) => (
                                     <tr key={index}>
                                         <td>{result.name}</td>
                                         <td>{result.direccion}</td>
