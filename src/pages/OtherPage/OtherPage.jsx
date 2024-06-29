@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import URL_BACK from '../../../config';
 import NavBar2 from '../../components/NavBar2/NavBar2';
-import './OtherProfile.css'; // Supposant que vous avez du CSS pour le style
+import './OtherPage.css'; // Supposant que vous avez du CSS pour le style
 
 function OtherProfile() {
   const [user, setUser] = useState(null);
