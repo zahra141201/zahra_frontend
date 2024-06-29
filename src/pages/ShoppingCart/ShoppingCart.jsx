@@ -5,7 +5,6 @@ import NavBar2 from '../../components/NavBar2/NavBar2';
 import axios from 'axios';
 import URL_BACK from '../../../config';
 import IngredientCard from '../../components/IngredientCard/IngredientCard';
-import EditIngredientForm from '../../components/EditIngredientForm/EditIngredientForm';
 
 function ShoppingCart() {
     const navigate = useNavigate();
@@ -49,16 +48,6 @@ function ShoppingCart() {
         navigate('/addingredient');
     };
 
-    const handleEditIngredient = (ingredientId) => {
-        // Non implémenté dans ce cas, car l'édition directe n'est pas prévue dans cette version
-        console.log('Edit ingredient:', ingredientId);
-    };
-
-    const handleDeleteIngredient = async (ingredientId) => {
-        // Non implémenté dans ce cas, car la suppression directe n'est pas prévue dans cette version
-        console.log('Delete ingredient:', ingredientId);
-    };
-
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -76,10 +65,8 @@ function ShoppingCart() {
                             <div className="d-flex justify-content-around flex-wrap">
                                 {userIngredients.map((ingredient, index) => (
                                     <div key={index} className='ingredient-card'>
-                                        <IngredientCard
+                                        <ShoppingCard
                                             ingredient={ingredient}
-                                            onDelete={handleDeleteIngredient}
-                                            onUpdate={handleEditIngredient}
                                         />
                                     </div>
                                 ))}
