@@ -56,9 +56,21 @@ const MainPage = () => {
         const fetchData = async () => {
             try {
                 const [usersResponse, ingredientsResponse] = await Promise.all([
-                    axios.get(`${URL_BACK}/users`),
+                    axios.get(`${URL_BACK}/users`, {
+                        headers: {
+                          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                          'Content-Type': 'application/json'
+                        }
+                      }),
                     axios.get(`${URL_BACK}/ingredientes`)
                 ]);
+
+                const response = await axios.get(`${URL_BACK}/users/${userEmail}`, {
+                    headers: {
+                      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                      'Content-Type': 'application/json'
+                    }
+                  });
 
                 const users = usersResponse.data;
                 const ingredients = ingredientsResponse.data;
