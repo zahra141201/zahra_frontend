@@ -1,78 +1,69 @@
 import React, { useState } from 'react';
-import './IngredientCard.css'; // Importe le fichier de styles CSS pour IngredientCard
 import axios from 'axios';
+import URL_BACK from '../../../config';
+import './IngredientCard.css'; // Importa el archivo de estilos CSS para IngredientCard
+import EditIngredientForm from '../EditIngredientForm/EditIngredientForm.jsx';
 
-const IngredientCard = ({ ingredient }) => {
-    const [showRequestForm, setShowRequestForm] = useState(false);
-    const [pickUpDate, setPickUpDate] = useState('');
-    const [comment, setComment] = useState('');
+const IngredientCard = ({ ingredient, onDelete, onUpdate }) => {
+    const [editMode, setEditMode] = useState(false); // Estado para manejar el modo de edición
     const [error, setError] = useState('');
 
-    const handleMakeRequest = () => {
-        setShowRequestForm(true);
+    const handleEdit = () => {
+        setEditMode(true); // Activar el modo de edición
     };
 
-    const handleSubmitRequest = async (event) => {
-        event.preventDefault();
-        try {
-            const response = await axios.post('/route_pour_create_request', {
-                pick_up_date: pickUpDate,
-                comment: comment,
-                state: 'pending', // État initial de la demande
-                made_by: 'user_id', // Remplacer par l'utilisateur connecté
-                id_ingrediente: ingredient.id, // ID de l'ingrédient
-            });
-            console.log('Request created:', response.data);
-            // Réinitialisation du formulaire et de l'état
-            setPickUpDate('');
-            setComment('');
-            setShowRequestForm(false);
-            setError('');
-        } catch (error) {
-            console.error('Error creating request:', error);
-            setError('An error occurred while creating the request');
+    const handleCancelEdit = () => {
+        setEditMode(false); // Desactivar el modo de edición
+    };
+
+    const handleDelete = async () => {
+    try {
+        const response = await axios.delete(`${URL_BACK}/ingredientes/${ingredient.id}`);
+        if (response.status === 204) {
+            onDelete(ingredient.id); // Eliminar el ingrediente del componente padre
+        } else {
+            setError(`Failed to delete ingredient: ${response.statusText}`);
         }
+    } catch (error) {
+        setError(`Error deleting ingredient: ${error.message}`);
+    }
+};
+
+    const handleUpdate = (updatedIngredient) => {
+        onUpdate(updatedIngredient); // Actualizar el ingrediente en el componente padre
+        setEditMode(false); // Desactivar el modo de edición después de actualizar
     };
 
     return (
         <div className='ingredient-card'>
             <img src={ingredient.imageUrl} alt={ingredient.name} className='ingredient-image' />
             <div className='ingredient-info'>
-                <div>
-                    <h3 className='ingredient-name'>{ingredient.name}</h3>
-                    <p className='ingredient-weight'>{ingredient.weight}</p>
-                    <p className='ingredient-expiration'>{ingredient.expiration_date}</p>
-                    <p className='ingredient-bought-date'>{ingredient.bought_date}</p>
-                    <p className='ingredient-price'>${ingredient.price}</p>
-                    <p className='ingredient-description'>{ingredient.description}</p>
-                </div>
-                {showRequestForm ? (
-                    <form onSubmit={handleSubmitRequest}>
-                        <label htmlFor='pickUpDate'>Pick-up Date:</label>
-                        <input
-                            type='date'
-                            id='pickUpDate'
-                            value={pickUpDate}
-                            onChange={(e) => setPickUpDate(e.target.value)}
-                            required
-                        />
-                        <label htmlFor='comment'>Comment:</label>
-                        <textarea
-                            id='comment'
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
-                            rows={4}
-                            required
-                        />
-                        <button type='submit'>Submit</button>
-                        {error && <div className='error-message'>{error}</div>}
-                    </form>
+                {editMode ? (
+                    <EditIngredientForm
+                        ingredientId={ingredient.id}
+                        onCancel={handleCancelEdit}
+                        onUpdate={handleUpdate}
+                    />
                 ) : (
-                    <button onClick={handleMakeRequest}>Make a Request</button>
+                    <div>
+                        <h3 className='ingredient-name'>{ingredient.name}</h3>
+                        <p className='ingredient-weight'>{ingredient.weight}</p>
+                        <p className='ingredient-expiration'>{ingredient.expiration_date}</p>
+                        <p className='ingredient-bought-date'>{ingredient.bought_date}</p>
+                        <p className='ingredient-price'>${ingredient.price}</p>
+                        <p className='ingredient-description'>{ingredient.description}</p>
+                        <div className="ingredient-buttons">
+                            <button onClick={handleEdit} className="btn btn-custom">Edit</button>
+                            <button onClick={() => handleDelete(ingredient.id)} className="btn btn-danger">Delete</button>
+                        </div>
+                    </div>
                 )}
+                {error && <div className="alert alert-danger">{error}</div>}
             </div>
         </div>
     );
 };
 
 export default IngredientCard;
+
+
