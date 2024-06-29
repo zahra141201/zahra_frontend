@@ -24,7 +24,7 @@ const ShoppingCard = ({ ingredient }) => {
     }, [ingredient.id]);
 
     return (
-        <div className='ingredient-card'>
+        <div className='shopping-card'>
             <img src={ingredient.imageUrl} alt={ingredient.name} className='ingredient-image' />
             <div className='ingredient-info'>
                 <div>

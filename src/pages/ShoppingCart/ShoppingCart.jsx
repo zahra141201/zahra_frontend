@@ -37,7 +37,7 @@ function ShoppingCart() {
             setUserIngredients(ingredients);
             setLoading(false);
 
-            alert('User Ingredients: ' + JSON.stringify(ingredients)); // Alert pour vérifier les données d'ingrédients récupérées
+            alert('User Ingredients: ' + JSON.stringify(ingredients)); // Vérifie les données d'ingrédients récupérées
         } catch (error) {
             console.error('Error fetching requests and ingredients:', error);
             alert('Error fetching requests and ingredients:', error.message);
@@ -64,9 +64,10 @@ function ShoppingCart() {
                             <p>FRIDGE'S {email}</p>
                             <div className="d-flex justify-content-around flex-wrap">
                                 {userIngredients.map((ingredient, index) => (
-                                    <div key={index} className='ingredient-card'>
+                                    <div key={index} className='shopping-card'> 
                                         <ShoppingCard
                                             ingredient={ingredient}
+                                            key={ingredient.id} 
                                         />
                                     </div>
                                 ))}
