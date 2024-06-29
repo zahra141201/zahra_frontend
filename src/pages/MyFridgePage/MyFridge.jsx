@@ -11,14 +11,15 @@ function MyFridgePage() {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [userIngredients, setUserIngredients] = useState([]);
+    const [ingredientRequests, setIngredientRequests] = useState({});
     const [editingIngredientId, setEditingIngredientId] = useState(null);
 
     useEffect(() => {
         const fetchUserEmail = async () => {
-            const userEmail = localStorage.getItem('email'); // Obtener el email del usuario logueado
+            const userEmail = localStorage.getItem('email');
             if (userEmail) {
                 setEmail(userEmail);
-                fetchIngredients(userEmail); // Llamar a la función para obtener los ingredientes
+                fetchIngredients(userEmail);
             }
         };
         fetchUserEmail();
@@ -32,9 +33,23 @@ function MyFridgePage() {
                 }
             });
             setUserIngredients(response.data);
+            response.data.forEach(ingredient => fetchRequestsForIngredient(ingredient.id));
         } catch (error) {
             console.error('Error fetching ingredients:', error);
             alert('Error fetching ingredients:', error.message);
+        }
+    };
+
+    const fetchRequestsForIngredient = async (ingredientId) => {
+        try {
+            const response = await axios.get(`${URL_BACK}/requests/ingredient/${ingredientId}`);
+            setIngredientRequests(prevState => ({
+                ...prevState,
+                [ingredientId]: response.data
+            }));
+        } catch (error) {
+            console.error('Error fetching requests:', error);
+            alert('Error fetching requests:', error.message);
         }
     };
 
@@ -69,6 +84,25 @@ function MyFridgePage() {
         }
     };
 
+    const handleUpdateRequestStatus = async (ingredientId, requestId, status) => {
+        try {
+            await axios.patch(`${URL_BACK}/requests/ingredient/${ingredientId}`, {
+                requestId,
+                status
+            });
+            const updatedRequests = ingredientRequests[ingredientId].map(request =>
+                request.id === requestId ? { ...request, state: status } : request
+            );
+            setIngredientRequests(prevState => ({
+                ...prevState,
+                [ingredientId]: updatedRequests
+            }));
+        } catch (error) {
+            console.error('Error updating request status:', error);
+            alert('Error updating request status:', error.message);
+        }
+    };
+
     return (
         <div className='container-fluid p-0 landing-page'>
             <NavBar2 />
@@ -95,6 +129,19 @@ function MyFridgePage() {
                                                 onUpdate={handleEditIngredient}
                                             />
                                         )}
+                                        <div className="requests">
+                                            {ingredientRequests[ingredient.id] && ingredientRequests[ingredient.id].map(request => (
+                                                <div key={request.id} className="request">
+                                                    <p>{`Request: ${request.id}, Status: ${request.state}`}</p>
+                                                    {request.state === 'pending' && (
+                                                        <>
+                                                            <button onClick={() => handleUpdateRequestStatus(ingredient.id, request.id, 'accepted')}>Accept</button>
+                                                            <button onClick={() => handleUpdateRequestStatus(ingredient.id, request.id, 'refused')}>Refuse</button>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
                                 ))}
                             </div>
