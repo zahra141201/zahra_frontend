@@ -10,7 +10,6 @@ import URL_BACK from '../../../config';
 
 const MainPage = () => {
     const location = useLocation();
-    const history = useHistory();
     const email = location.state?.email || '';
 
     const [nightMode, setNightMode] = useState(() => {
@@ -62,18 +61,10 @@ const MainPage = () => {
     }, []);
 
     const handleProfileClick = (email) => {
-        history.push({
-            pathname: '/OtherPage',
-            state: { email }
-        });
+        navigate('/OtherPage', { state: { email } });
     };
 
-    const handleProductPageClick = (productId) => {
-        history.push({
-            pathname: '/ProductPage',
-            state: { productId }
-        });
-    };
+
 
     return (
         <div className={nightMode ? "dark-mode" : ""}>
@@ -101,7 +92,6 @@ const MainPage = () => {
                                         <td>{result.productos.join(', ')}</td>
                                         <td>
                                             <button className="btn btn-primary" onClick={() => handleProfileClick(result.email)}>Voir le profil</button>
-                                            <button className="btn btn-primary" onClick={() => handleProductPageClick(result.productId)}>View Product</button>
                                         </td>
                                     </tr>
                                 ))}
