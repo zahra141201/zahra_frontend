@@ -65,6 +65,9 @@ const MainPage = () => {
     const handleProfileClick = (email) => {
         navigate('/OtherPage', { state: { email } }); // Utilisation de navigate pour la navigation en v6
     };
+    const handleFridgeClick = (email) => {
+        navigate('/OtherFridge', { state: { email } }); // Utilisation de navigate pour la navigation en v6
+    };
 
     return (
         <div className={nightMode ? "dark-mode" : ""}>
@@ -93,7 +96,7 @@ const MainPage = () => {
                                         <td>{result.direccion}</td>
                                         <td>{result.productos.join(', ')}</td>
                                         <td>
-                                            <button className="btn btn-primary" onClick={() => handleProfileClick(result.email)}>Voir le profil</button>
+                                            <button className="btn btn-primary" onClick={() => handleFridgeClick(result.email)}>Cehck My Fridge !</button>
                                         </td>
                                     </tr>
                                 ))}
