@@ -4,7 +4,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './MainPage.css'; 
 import NavBar2 from '../../components/NavBar2/NavBar2';
 import Mapa from '../../components/Mapa/Mapa';
-import SearchCard from '../../components/SearchCard/SearchCard';
 import SwitchBox from '../../components/SwitchBox/SwitchBox';
 import NightMode from '../../components/NightMode/NightMode'; 
 import axios from 'axios';
@@ -68,19 +67,14 @@ const MainPage = () => {
                 const users = usersResponse.data;
                 const ingredients = ingredientsResponse.data;
 
-                alert('Users: ' + JSON.stringify(users, null, 2));
-                alert('Ingredients: ' + JSON.stringify(ingredients, null, 2));
-
                 // Associer les ingrédients aux utilisateurs
                 const results = users.map(user => {
                     return {
                         name: user.name,
                         direccion: user.address, // Assurez-vous que le champ adresse est correct
-                        productos: ingredients.filter(ingredient => ingredient.owner === user.id).map(ingredient => ingredient.name)
+                        productos: ingredients.filter(ingredient => ingredient.owner === user.email).map(ingredient => ingredient.name)
                     };
                 });
-
-                alert('Results: ' + JSON.stringify(results, null, 2));
 
                 setSearchResults(results);
             } catch (error) {
@@ -110,13 +104,24 @@ const MainPage = () => {
                 <Mapa height="200px" width="300px" className="Mapa" />
                 <div className="search-container">
                     <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" className="scrollspy-example bg-body-tertiary p-3 rounded-2" tabIndex="0">
-                        <ul className="list-group">
-                            {filteredResults.map((result, index) => (
-                                <li key={index} className="list-group-item">
-                                    <SearchCard name={result.name} direccion={result.direccion} productos={result.productos} />
-                                </li>
-                            ))}
-                        </ul>
+                        <table className="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Adresse</th>
+                                    <th>Produits</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredResults.map((result, index) => (
+                                    <tr key={index}>
+                                        <td>{result.name}</td>
+                                        <td>{result.direccion}</td>
+                                        <td>{result.productos.join(', ')}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
