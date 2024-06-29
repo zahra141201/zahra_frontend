@@ -56,6 +56,10 @@ function ShoppingCart() {
         return <div>Loading...</div>;
     }
 
+    const filterIngredientsByState = (state) => {
+        return userIngredients.filter(ingredient => ingredient.requestInfo && ingredient.requestInfo.state === state);
+    };
+
     return (
         <div className='container-fluid p-0 landing-page'>
             <NavBar2 />
@@ -66,36 +70,91 @@ function ShoppingCart() {
                         <button onClick={handleAddIngredient} className="btn-add">Add</button>
                         <div className="mt-4">
                             <p>FRIDGE'S {email}</p>
-                            <div className="d-flex justify-content-around flex-wrap">
-                                {userIngredients.map((ingredient, index) => (
-                                    <div key={index} className='shopping-card'>
-                                        <img src={ingredient.imageUrl} alt={ingredient.name} className='ingredient-image' />
-                                        <div className='ingredient-info'>
-                                            <div>
-                                                <h3 className='ingredient-name'>{ingredient.name}</h3>
-                                                <p className='ingredient-weight'>{ingredient.weight}</p>
-                                                <p className='ingredient-expiration'>{ingredient.expiration_date}</p>
-                                                <p className='ingredient-bought-date'>{ingredient.bought_date}</p>
-                                                <p className='ingredient-price'>${ingredient.price}</p>
-                                                <p className='ingredient-description'>{ingredient.description}</p>
-                                            </div>
-                                            <div className='request-info'>
-                                                <h4>Request Info:</h4>
-                                                {ingredient.requestInfo ? (
-                                                    <>
-                                                        <p><strong>Made by:</strong> {ingredient.requestInfo.made_by}</p>
-                                                        <p><strong>Status:</strong> {ingredient.requestInfo.state}</p>
-                                                        <p><strong>Pick-up Date:</strong> {ingredient.requestInfo.pick_up_date}</p>
-                                                        <p><strong>Comment:</strong> {ingredient.requestInfo.comment}</p>
-                                                    </>
-                                                ) : (
-                                                    <p>No request info available</p>
-                                                )}
+
+                            <div className="status-section">
+                                <h2>Pending Requests</h2>
+                                <div className="d-flex justify-content-around flex-wrap">
+                                    {filterIngredientsByState('pending').map((ingredient, index) => (
+                                        <div key={index} className='shopping-card'>
+                                            <img src={ingredient.imageUrl} alt={ingredient.name} className='ingredient-image' />
+                                            <div className='ingredient-info'>
+                                                <div>
+                                                    <h3 className='ingredient-name'>{ingredient.name}</h3>
+                                                    <p className='ingredient-weight'>{ingredient.weight}</p>
+                                                    <p className='ingredient-expiration'>{ingredient.expiration_date}</p>
+                                                    <p className='ingredient-bought-date'>{ingredient.bought_date}</p>
+                                                    <p className='ingredient-price'>${ingredient.price}</p>
+                                                    <p className='ingredient-description'>{ingredient.description}</p>
+                                                </div>
+                                                <div className='request-info'>
+                                                    <h4>Request Info:</h4>
+                                                    <p><strong>Made by:</strong> {ingredient.requestInfo.made_by}</p>
+                                                    <p><strong>Status:</strong> {ingredient.requestInfo.state}</p>
+                                                    <p><strong>Pick-up Date:</strong> {ingredient.requestInfo.pick_up_date}</p>
+                                                    <p><strong>Comment:</strong> {ingredient.requestInfo.comment}</p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
+
+                            <div className="status-section">
+                                <h2>Accepted Requests</h2>
+                                <div className="d-flex justify-content-around flex-wrap">
+                                    {filterIngredientsByState('accepted').map((ingredient, index) => (
+                                        <div key={index} className='shopping-card'>
+                                            <img src={ingredient.imageUrl} alt={ingredient.name} className='ingredient-image' />
+                                            <div className='ingredient-info'>
+                                                <div>
+                                                    <h3 className='ingredient-name'>{ingredient.name}</h3>
+                                                    <p className='ingredient-weight'>{ingredient.weight}</p>
+                                                    <p className='ingredient-expiration'>{ingredient.expiration_date}</p>
+                                                    <p className='ingredient-bought-date'>{ingredient.bought_date}</p>
+                                                    <p className='ingredient-price'>${ingredient.price}</p>
+                                                    <p className='ingredient-description'>{ingredient.description}</p>
+                                                </div>
+                                                <div className='request-info'>
+                                                    <h4>Request Info:</h4>
+                                                    <p><strong>Made by:</strong> {ingredient.requestInfo.made_by}</p>
+                                                    <p><strong>Status:</strong> {ingredient.requestInfo.state}</p>
+                                                    <p><strong>Pick-up Date:</strong> {ingredient.requestInfo.pick_up_date}</p>
+                                                    <p><strong>Comment:</strong> {ingredient.requestInfo.comment}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="status-section">
+                                <h2>Refused Requests</h2>
+                                <div className="d-flex justify-content-around flex-wrap">
+                                    {filterIngredientsByState('refused').map((ingredient, index) => (
+                                        <div key={index} className='shopping-card'>
+                                            <img src={ingredient.imageUrl} alt={ingredient.name} className='ingredient-image' />
+                                            <div className='ingredient-info'>
+                                                <div>
+                                                    <h3 className='ingredient-name'>{ingredient.name}</h3>
+                                                    <p className='ingredient-weight'>{ingredient.weight}</p>
+                                                    <p className='ingredient-expiration'>{ingredient.expiration_date}</p>
+                                                    <p className='ingredient-bought-date'>{ingredient.bought_date}</p>
+                                                    <p className='ingredient-price'>${ingredient.price}</p>
+                                                    <p className='ingredient-description'>{ingredient.description}</p>
+                                                </div>
+                                                <div className='request-info'>
+                                                    <h4>Request Info:</h4>
+                                                    <p><strong>Made by:</strong> {ingredient.requestInfo.made_by}</p>
+                                                    <p><strong>Status:</strong> {ingredient.requestInfo.state}</p>
+                                                    <p><strong>Pick-up Date:</strong> {ingredient.requestInfo.pick_up_date}</p>
+                                                    <p><strong>Comment:</strong> {ingredient.requestInfo.comment}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
