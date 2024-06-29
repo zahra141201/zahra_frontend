@@ -31,17 +31,17 @@ function ShoppingCart() {
                 const ingredientResponse = await axios.get(`${URL_BACK}/ingredientes/${request.id_ingrediente}`);
                 const ingredient = ingredientResponse.data;
 
-                // Fetch request info
-                const requestInfoResponse = await axios.get(`${URL_BACK}/requests/${request.id}`); // Adjust endpoint according to your API
-                const requestInfo = requestInfoResponse.data;
+                // Ajouter les informations de la demande à chaque ingrédient
+                ingredient.requestInfo = request;
 
-                // Combine ingredient and request info
-                return { ...ingredient, requestInfo };
+                return ingredient;
             });
 
             const ingredients = await Promise.all(ingredientPromises);
             setUserIngredients(ingredients);
             setLoading(false);
+
+            alert('User Ingredients: ' + JSON.stringify(ingredients)); // Vérifie les données d'ingrédients récupérées
         } catch (error) {
             console.error('Error fetching requests and ingredients:', error);
             alert('Error fetching requests and ingredients:', error.message);
@@ -81,9 +81,16 @@ function ShoppingCart() {
                                             </div>
                                             <div className='request-info'>
                                                 <h4>Request Info:</h4>
-                                                <p><strong>Status:</strong> {ingredient.requestInfo ? ingredient.requestInfo.state : 'N/A'}</p>
-                                                <p><strong>Pick-up Date:</strong> {ingredient.requestInfo ? ingredient.requestInfo.pick_up_date : 'N/A'}</p>
-                                                {/* Afficher d'autres détails de la demande si nécessaire */}
+                                                {ingredient.requestInfo ? (
+                                                    <>
+                                                        <p><strong>Made by:</strong> {ingredient.requestInfo.made_by}</p>
+                                                        <p><strong>Status:</strong> {ingredient.requestInfo.state}</p>
+                                                        <p><strong>Pick-up Date:</strong> {ingredient.requestInfo.pick_up_date}</p>
+                                                        <p><strong>Comment:</strong> {ingredient.requestInfo.comment}</p>
+                                                    </>
+                                                ) : (
+                                                    <p>No request info available</p>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
