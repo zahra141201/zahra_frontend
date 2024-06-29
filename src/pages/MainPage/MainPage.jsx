@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom'; // Utilisation de useLocation
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MainPage.css'; 
 import NavBar2 from '../../components/NavBar2/NavBar2';
@@ -9,10 +9,21 @@ import axios from 'axios';
 import URL_BACK from '../../../config';
 
 const MainPage = () => {
-    const [nightMode, setNightMode] = useState(false);
-    const [searchResults, setSearchResults] = useState([]);
     const location = useLocation();
     const email = location.state?.email || '';
+
+    const [nightMode, setNightMode] = useState(() => {
+        const storedValue = localStorage.getItem('nightMode');
+        return storedValue ? JSON.parse(storedValue) : false;
+    });
+
+    const [searchResults, setSearchResults] = useState([]);
+
+    const toggleNightMode = () => {
+        const newNightMode = !nightMode;
+        setNightMode(newNightMode);
+        localStorage.setItem('nightMode', JSON.stringify(newNightMode));
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -20,39 +31,34 @@ const MainPage = () => {
                 const [usersResponse, ingredientsResponse] = await Promise.all([
                     axios.get(`${URL_BACK}/users`, {
                         headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                            'Content-Type': 'application/json'
+                          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                          'Content-Type': 'application/json'
                         }
-                    }),
+                      }),
                     axios.get(`${URL_BACK}/ingredientes`)
                 ]);
 
                 const users = usersResponse.data;
                 const ingredients = ingredientsResponse.data;
 
-                const results = users.map(user => ({
-                    name: user.name,
-                    direccion: user.address,
-                    productos: ingredients.filter(ingredient => ingredient.owner === user.email).map(ingredient => ingredient.name),
-                    email: user.email
-                }));
+                // Associer les ingrédients aux utilisateurs
+                const results = users.map(user => {
+                    return {
+                        name: user.name,
+                        direccion: user.address,
+                        productos: ingredients.filter(ingredient => ingredient.owner === user.email).map(ingredient => ingredient.name),
+                        email: user.email
+                    };
+                });
 
                 setSearchResults(results);
             } catch (error) {
                 console.error('Error fetching data:', error);
-                // Gérer l'erreur, par exemple :
-                // alert('Erreur lors du chargement des données. Veuillez réessayer plus tard.');
             }
         };
 
         fetchData();
     }, []);
-
-    const toggleNightMode = () => {
-        const newNightMode = !nightMode;
-        setNightMode(newNightMode);
-        localStorage.setItem('nightMode', JSON.stringify(newNightMode));
-    };
 
     return (
         <div className={nightMode ? "dark-mode" : ""}>
