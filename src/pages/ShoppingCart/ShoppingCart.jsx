@@ -4,7 +4,7 @@ import './ShoppingCart.css';
 import NavBar2 from '../../components/NavBar2/NavBar2';
 import axios from 'axios';
 import URL_BACK from '../../../config';
-import IngredientCard from '../../components/IngredientCard/IngredientCard';
+import ShoppingCard from '../../components/ShoppingCard/ShoppingCard';
 
 function ShoppingCart() {
     const navigate = useNavigate();

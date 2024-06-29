@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import URL_BACK from '../../../config';
-import './IngredientCard.css'; // Importe el archivo de estilos CSS para IngredientCard
+import './ShoppingCard.css'; // Importe el archivo de estilos CSS para IngredientCard
 
 const ShoppingCard = ({ ingredient }) => {
     const [error, setError] = useState('');
