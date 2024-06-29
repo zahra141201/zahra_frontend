@@ -40,6 +40,8 @@ const MainPage = () => {
                 setSearchResults(results);
             } catch (error) {
                 console.error('Error fetching data:', error);
+                // Gérer l'erreur, par exemple :
+                // alert('Erreur lors du chargement des données. Veuillez réessayer plus tard.');
             }
         };
 
