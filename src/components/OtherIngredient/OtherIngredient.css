@@ -1,0 +1,34 @@
+.ingredient-card {
+    padding: 10px;
+    background-color: #f0f0f0;
+    margin-bottom: 10px;
+}
+
+.ingredient-image {
+    max-width: 100%;
+}
+
+.ingredient-info {
+    padding: 10px;
+}
+
+.ingredient-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.ingredient-weight,
+.ingredient-expiration,
+.ingredient-bought-date,
+.ingredient-price,
+.ingredient-description {
+    margin-bottom: 5px;
+}
+
+.ingredient-buttons {
+    margin-top: 10px;
+}
+
+.ingredient-buttons button {
+    margin-right: 10px;
+}

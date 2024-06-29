@@ -4,7 +4,7 @@ import './OtherFridge.css';
 import NavBar2 from '../../components/NavBar2/NavBar2';
 import axios from 'axios';
 import URL_BACK from '../../../config';
-import IngredientCard from '../../components/IngredientCard/IngredientCard';
+import OtherIngredient from '../../components/OtherIngredient/OtherIngredient';
 
 function OtherFridge() {
     const location = useLocation();
@@ -48,7 +48,7 @@ function OtherFridge() {
                             <div className="d-flex justify-content-around flex-wrap">
                                 {userIngredients.map((ingredient, index) => (
                                     <div key={index} className='ingredient-card'>
-                                        <IngredientCard ingredient={ingredient} />
+                                        <OtherIngredient ingredient={ingredient} />
                                     </div>
                                 ))}
                             </div>
