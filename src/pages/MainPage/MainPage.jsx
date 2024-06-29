@@ -65,24 +65,22 @@ const MainPage = () => {
                     axios.get(`${URL_BACK}/ingredientes`)
                 ]);
 
-                const response = await axios.get(`${URL_BACK}/users/${userEmail}`, {
-                    headers: {
-                      'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                      'Content-Type': 'application/json'
-                    }
-                  });
-
                 const users = usersResponse.data;
                 const ingredients = ingredientsResponse.data;
+
+                alert('Users: ' + JSON.stringify(users, null, 2));
+                alert('Ingredients: ' + JSON.stringify(ingredients, null, 2));
 
                 // Associer les ingrédients aux utilisateurs
                 const results = users.map(user => {
                     return {
                         name: user.name,
                         direccion: user.address, // Assurez-vous que le champ adresse est correct
-                        productos: ingredients.filter(ingredient => ingredient.userId === user.id).map(ingredient => ingredient.name)
+                        productos: ingredients.filter(ingredient => ingredient.owner === user.id).map(ingredient => ingredient.name)
                     };
                 });
+
+                alert('Results: ' + JSON.stringify(results, null, 2));
 
                 setSearchResults(results);
             } catch (error) {
