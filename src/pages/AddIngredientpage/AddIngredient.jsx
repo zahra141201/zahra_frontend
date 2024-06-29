@@ -1,7 +1,7 @@
 import React from 'react';
 import AddIngredientForm from '../../components/AddIngredientForm/AddIngredientForm';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import NavBar from '../../components/NavBar/NavBar';
+import NavBar2 from '../../components/NavBar2/NavBar2';
 
 const SignUp = () => {
     return (
