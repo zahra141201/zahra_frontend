@@ -57,7 +57,7 @@ const MainPage = () => {
             try {
                 const [usersResponse, ingredientsResponse] = await Promise.all([
                     axios.get(`${URL_BACK}/users`),
-                    axios.get(`${URL_BACK}/ingredients`)
+                    axios.get(`${URL_BACK}/ingredientes`)
                 ]);
 
                 const users = usersResponse.data;
