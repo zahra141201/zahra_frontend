@@ -68,6 +68,13 @@ const MainPage = () => {
         });
     };
 
+    const handleProductPageClick = (productId) => {
+        history.push({
+            pathname: '/ProductPage',
+            state: { productId }
+        });
+    };
+
     return (
         <div className={nightMode ? "dark-mode" : ""}>
             <NavBar2 />
@@ -94,6 +101,7 @@ const MainPage = () => {
                                         <td>{result.productos.join(', ')}</td>
                                         <td>
                                             <button className="btn btn-primary" onClick={() => handleProfileClick(result.email)}>Voir le profil</button>
+                                            <button className="btn btn-primary" onClick={() => handleProductPageClick(result.productId)}>View Product</button>
                                         </td>
                                     </tr>
                                 ))}
