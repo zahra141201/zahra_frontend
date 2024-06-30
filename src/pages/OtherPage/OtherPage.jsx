@@ -51,7 +51,7 @@ function OtherProfile() {
 
           // Step 2: Check each request to see if it links to the profile user
           for (const request of requests) {
-            const ingredientResponse = await axios.get(`${URL_BACK}/ingredientes/${request.id}`, {
+            const ingredientResponse = await axios.get(`${URL_BACK}/ingredientes/${request.id_ingrediente}`, {
               headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json'
