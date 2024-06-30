@@ -53,7 +53,7 @@ function OtherProfile() {
 
           // Step 2: Check each request to see if it links to the profile user
           for (const request of requests) {
-            const ingredientResponse = await axios.get(`${URL_BACK}/ingredientes/${request.id_ingrediente}`, {
+            const ingredientResponse = await axios.get(`${URL_BACK}/ingredients/${request.id_ingredient}`, {
               headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json'
@@ -140,7 +140,7 @@ function OtherProfile() {
                           {[1, 2, 3, 4, 5].map((value) => (
                             <span
                               key={value}
-                              className={value <= rating ? "filled" : ""}
+                              className={value <= rating ? "star filled" : "star"}
                               onClick={() => handleStarClick(value)}
                             >
                               &#9733;
