@@ -38,7 +38,7 @@ function OtherProfile() {
 
     const checkLink = async (loggedInEmail, profileEmail) => {
       try {
-        const response = await axios.get(`${URL_BACK}/requests/check-link`, {
+        const response = await axios.get(`${URL_BACK}/valorations/check-link`, {
           params: { loggedInEmail, profileEmail },
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
