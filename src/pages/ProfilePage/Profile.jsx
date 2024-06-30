@@ -8,6 +8,8 @@ function Profile() {
   const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [updatedUser, setUpdatedUser] = useState({});
+  const [valorations, setValorations] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -27,6 +29,7 @@ function Profile() {
         if (response.status === 200) {
           setUser(response.data);
           setUpdatedUser(response.data); // Initialise updatedUser avec les données de l'utilisateur
+          fetchValorations(userEmail);
         } else {
           alert('Failed to fetch user data:', response.statusText);
         }
@@ -37,6 +40,21 @@ function Profile() {
 
     fetchUser();
   }, []);
+
+  const fetchValorations = async (email) => {
+    try {
+      const response = await axios.get(`${URL_BACK}/valorations/${email}`);
+      setValorations(response.data);
+
+      // Calcul de la moyenne des points (puntuation)
+      const totalPoints = response.data.reduce((sum, valoration) => sum + valoration.puntuation, 0);
+      const average = totalPoints / response.data.length;
+      setAverageRating(average.toFixed(1)); // Arrondi à une décimale
+    } catch (error) {
+      console.error('Error fetching valorations:', error);
+      alert('Error fetching valorations:', error.message);
+    }
+  };
 
   const handleModifyClick = () => {
     setIsEditing(true);
@@ -116,6 +134,7 @@ function Profile() {
                     <p><strong>Address:</strong> {user.address}</p>
                     <p><strong>Description:</strong> {user.description}</p>
                     <p><strong>Admin:</strong> {user.is_admin ? 'Yes' : 'No'}</p>
+                    <p><strong>Average Rating:</strong> {averageRating}</p>
                     <button onClick={handleModifyClick} className="btn btn-secondary">Modify</button>
                   </div>
                 )
