@@ -98,7 +98,7 @@ function OtherProfile() {
         }
       });
   
-      console.log('Existing Valoration Response:', existingValorationResponse);
+      alert('User valorations: ' + JSON.stringify(existingValorationResponse));
   
       if (existingValorationResponse.status === 200 && existingValorationResponse.data.length > 0) {
         // S'il existe déjà une valorisation, effectuer un PATCH
