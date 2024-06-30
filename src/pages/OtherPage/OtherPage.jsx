@@ -100,7 +100,7 @@ function OtherProfile() {
   
       alert('User valorations: ' + JSON.stringify(existingValorationResponse));
   
-      if (existingValorationResponse.status === 200 && existingValorationResponse.data.length > 0) {
+      if (existingValorationResponse.status === 200 && existingValorationResponse.data && existingValorationResponse.data.length > 0) {
         // S'il existe déjà une valorisation, effectuer un PATCH
         const existingValorationId = existingValorationResponse.data[0].id;
         const patchResponse = await axios.patch(`${URL_BACK}/valorations/${existingValorationId}`, {
