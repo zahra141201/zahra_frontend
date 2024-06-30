@@ -97,6 +97,7 @@ function OtherProfile() {
           'Content-Type': 'application/json'
         }
       });
+      alert('recherche de valoration faite', existingValorationResponse);
 
       if (existingValorationResponse.status === 200 && existingValorationResponse.data.length > 0) {
         // S'il existe déjà une valoration, effectuer un PATCH
