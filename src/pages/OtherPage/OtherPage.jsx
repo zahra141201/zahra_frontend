@@ -38,16 +38,36 @@ function OtherProfile() {
 
     const checkLink = async (loggedInEmail, profileEmail) => {
       try {
-        const response = await axios.get(`${URL_BACK}/valorations/check-link`, {
-          params: { loggedInEmail, profileEmail },
+        // Step 1: Fetch requests made by the logged-in user
+        const requestsResponse = await axios.get(`${URL_BACK}/requests/user/${loggedInEmail}`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json'
           }
         });
 
-        if (response.status === 200 && response.data.hasLink) {
-          setHasLink(true);
+        if (requestsResponse.status === 200) {
+          const requests = requestsResponse.data;
+
+          // Step 2: Check each request to see if it links to the profile user
+          for (const request of requests) {
+            const ingredientResponse = await axios.get(`${URL_BACK}/ingredients/${request.id_ingredient}`, {
+              headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json'
+              }
+            });
+
+            if (ingredientResponse.status === 200) {
+              const ingredient = ingredientResponse.data;
+              if (ingredient.owner === profileEmail) {
+                setHasLink(true);
+                break; // No need to check further if we already found a link
+              }
+            }
+          }
+        } else {
+          console.error('Failed to fetch requests:', requestsResponse.statusText);
         }
       } catch (error) {
         console.error('Error checking link:', error);
