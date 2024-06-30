@@ -7,10 +7,11 @@ import './OtherPage.css'; // Assurez-vous d'avoir votre fichier CSS pour le styl
 
 function OtherProfile() {
   const [user, setUser] = useState(null);
+  const [hasLink, setHasLink] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchUserData = async () => {
       const userEmail = location.state?.email;
       if (!userEmail) {
         return;
@@ -26,6 +27,7 @@ function OtherProfile() {
 
         if (response.status === 200) {
           setUser(response.data);
+          checkLink(localStorage.getItem('email'), userEmail);
         } else {
           alert('Failed to fetch user data:', response.statusText);
         }
@@ -34,7 +36,25 @@ function OtherProfile() {
       }
     };
 
-    fetchUser();
+    const checkLink = async (loggedInEmail, profileEmail) => {
+      try {
+        const response = await axios.get(`${URL_BACK}/requests/check-link`, {
+          params: { loggedInEmail, profileEmail },
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.status === 200 && response.data.hasLink) {
+          setHasLink(true);
+        }
+      } catch (error) {
+        console.error('Error checking link:', error);
+      }
+    };
+
+    fetchUserData();
   }, [location.state?.email]);
 
   return (
@@ -54,6 +74,7 @@ function OtherProfile() {
                   <p><strong>Address:</strong> {user.address}</p>
                   <p><strong>Description:</strong> {user.description}</p>
                   <p><strong>Admin:</strong> {user.is_admin ? 'Yes' : 'No'}</p>
+                  {hasLink && <p><strong>Lien:</strong> Oui</p>}
                 </div>
               ) : (
                 <div>Loading user data...</div>
