@@ -86,7 +86,7 @@ function OtherProfile() {
 
   const handleSubmitRating = async () => {
     try {
-      // Vérifier s'il existe déjà une valoration faite par l'utilisateur connecté pour l'utilisateur visité
+      // Vérifier s'il existe déjà une valorisation faite par l'utilisateur connecté pour l'utilisateur visité
       const existingValorationResponse = await axios.get(`${URL_BACK}/valorations`, {
         params: {
           email_user: user.email,
@@ -97,12 +97,13 @@ function OtherProfile() {
           'Content-Type': 'application/json'
         }
       });
-      alert('recherche de valoration faite', existingValorationResponse.data);
-
-      if (existingValorationResponse.status === 200) {
-        // S'il existe déjà une valoration, effectuer un PATCH
+  
+      console.log('Existing Valoration Response:', existingValorationResponse);
+  
+      if (existingValorationResponse.status === 200 && existingValorationResponse.data.length > 0) {
+        // S'il existe déjà une valorisation, effectuer un PATCH
         const existingValorationId = existingValorationResponse.data[0].id;
-        await axios.patch(`${URL_BACK}/valorations/${existingValorationId}`, {
+        const patchResponse = await axios.patch(`${URL_BACK}/valorations/${existingValorationId}`, {
           puntuation: rating,
           comment: comment,
           email_user: user.email,
@@ -113,10 +114,12 @@ function OtherProfile() {
             'Content-Type': 'application/json'
           }
         });
+  
+        console.log('Patch Response:', patchResponse);
         alert('Rating updated successfully!');
       } else {
-        // S'il n'existe pas de valoration, effectuer un POST pour créer une nouvelle valoration
-        const response = await axios.post(`${URL_BACK}/valorations`, {
+        // S'il n'existe pas de valorisation, effectuer un POST pour créer une nouvelle valorisation
+        const postResponse = await axios.post(`${URL_BACK}/valorations`, {
           puntuation: rating,
           comment: comment,
           email_user: user.email,
@@ -127,14 +130,15 @@ function OtherProfile() {
             'Content-Type': 'application/json'
           }
         });
-
-        if (response.status === 201) {
+  
+        console.log('Post Response:', postResponse);
+        if (postResponse.status === 201) {
           alert('Rating submitted successfully!');
         } else {
-          alert('Failed to submit rating:', response.statusText);
+          alert('Failed to submit rating:', postResponse.statusText);
         }
       }
-
+  
       // Réinitialiser les états après soumission si nécessaire
       setRating(0);
       setComment('');
@@ -143,6 +147,7 @@ function OtherProfile() {
       alert('Error submitting rating:', error.message);
     }
   };
+  
 
   return (
     <div className='container-fluid p-0 landing-page'>
