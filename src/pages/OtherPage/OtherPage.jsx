@@ -1,12 +1,9 @@
-// src/pages/OtherProfile.js
-
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
+import URL_BACK from '../../../config';
 import NavBar2 from '../../components/NavBar2/NavBar2';
 import './OtherPage.css'; // Assurez-vous d'avoir votre fichier CSS pour le style
-
-const URL_BACK = 'http://localhost:3000/api'; // URL de votre backend
 
 function OtherProfile() {
   const [user, setUser] = useState(null);
@@ -34,16 +31,16 @@ function OtherProfile() {
           setUser(response.data);
           checkLink(localStorage.getItem('email'), userEmail);
         } else {
-          alert('Échec de récupération des données utilisateur :', response.statusText);
+          alert('Failed to fetch user data:', response.statusText);
         }
       } catch (error) {
-        alert('Erreur lors de la récupération des données utilisateur :', error);
+        alert('Error fetching user data:', error);
       }
     };
 
     const checkLink = async (loggedInEmail, profileEmail) => {
       try {
-        // Étape 1 : Récupérer les demandes faites par l'utilisateur connecté
+        // Step 1: Fetch requests made by the logged-in user
         const requestsResponse = await axios.get(`${URL_BACK}/requests/user/${loggedInEmail}`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -54,7 +51,7 @@ function OtherProfile() {
         if (requestsResponse.status === 200) {
           const requests = requestsResponse.data;
 
-          // Étape 2 : Vérifier chaque demande pour voir si elle est liée à l'utilisateur de profil
+          // Step 2: Check each request to see if it links to the profile user
           for (const request of requests) {
             const ingredientResponse = await axios.get(`${URL_BACK}/ingredientes/${request.id_ingrediente}`, {
               headers: {
@@ -67,15 +64,15 @@ function OtherProfile() {
               const ingredient = ingredientResponse.data;
               if (ingredient.owner === profileEmail) {
                 setHasLink(true);
-                break; // Pas besoin de vérifier plus loin si nous avons déjà trouvé un lien
+                break; // No need to check further if we already found a link
               }
             }
           }
         } else {
-          console.error('Échec de récupération des demandes :', requestsResponse.statusText);
+          console.error('Failed to fetch requests:', requestsResponse.statusText);
         }
       } catch (error) {
-        console.error('Erreur lors de la vérification du lien :', error);
+        console.error('Error checking link:', error);
       }
     };
 
@@ -89,18 +86,22 @@ function OtherProfile() {
 
   const handleSubmitRating = async () => {
     try {
-      // Vérifier s'il existe déjà une validation faite par l'utilisateur connecté pour l'utilisateur visité
-      const existingValidationResponse = await axios.get(`${URL_BACK}/valorations/${user.email}`, {
+      // Vérifier s'il existe déjà une valoration faite par l'utilisateur connecté pour l'utilisateur visité
+      const existingValorationResponse = await axios.get(`${URL_BACK}/valorations`, {
+        params: {
+          email_user: user.email,
+          made_by: localStorage.getItem('email')
+        },
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'
         }
       });
 
-      if (existingValidationResponse.status === 200 && existingValidationResponse.data.length > 0) {
-        // S'il existe déjà une validation, effectuer un PATCH
-        const existingValidationId = existingValidationResponse.data[0].id;
-        await axios.patch(`${URL_BACK}/valorations/${existingValidationId}`, {
+      if (existingValorationResponse.status === 200 && existingValorationResponse.data.length > 0) {
+        // S'il existe déjà une valoration, effectuer un PATCH
+        const existingValorationId = existingValorationResponse.data[0].id;
+        await axios.patch(`${URL_BACK}/valorations/${existingValorationId}`, {
           puntuation: rating,
           comment: comment,
           email_user: user.email,
@@ -111,9 +112,9 @@ function OtherProfile() {
             'Content-Type': 'application/json'
           }
         });
-        alert('Évaluation mise à jour avec succès !');
+        alert('Rating updated successfully!');
       } else {
-        // S'il n'existe pas de validation, effectuer un POST pour créer une nouvelle validation
+        // S'il n'existe pas de valoration, effectuer un POST pour créer une nouvelle valoration
         const response = await axios.post(`${URL_BACK}/valorations`, {
           puntuation: rating,
           comment: comment,
@@ -127,9 +128,9 @@ function OtherProfile() {
         });
 
         if (response.status === 201) {
-          alert('Évaluation soumise avec succès !');
+          alert('Rating submitted successfully!');
         } else {
-          alert('Échec de soumission de l\'évaluation :', response.statusText);
+          alert('Failed to submit rating:', response.statusText);
         }
       }
 
@@ -137,8 +138,8 @@ function OtherProfile() {
       setRating(0);
       setComment('');
     } catch (error) {
-      console.error('Erreur lors de la soumission de l\'évaluation :', error);
-      alert('Erreur lors de la soumission de l\'évaluation :', error.message);
+      console.error('Error submitting rating:', error);
+      alert('Error submitting rating:', error.message);
     }
   };
 
@@ -148,22 +149,22 @@ function OtherProfile() {
       <div className="container mt-5">
         <div className="row justify-content-center align-items-center">
           <div className="col-md-8 col-lg-6 text-center">
-            <h1 className="mt-5">Profil de l'utilisateur</h1>
+            <h1 className="mt-5">User Profile</h1>
             <div className="user-info">
               {user ? (
                 <div className="user-details">
-                  <p><strong>Email :</strong> {user.email}</p>
-                  <p><strong>Nom :</strong> {user.name}</p>
-                  <p><strong>Téléphone :</strong> {user.telephone}</p>
-                  <p><strong>Membre depuis :</strong> {new Date(user.member_since).toLocaleDateString()}</p>
-                  <p><strong>Adresse :</strong> {user.address}</p>
-                  <p><strong>Description :</strong> {user.description}</p>
-                  <p><strong>Admin :</strong> {user.is_admin ? 'Oui' : 'Non'}</p>
+                  <p><strong>Email:</strong> {user.email}</p>
+                  <p><strong>Name:</strong> {user.name}</p>
+                  <p><strong>Telephone:</strong> {user.telephone}</p>
+                  <p><strong>Member Since:</strong> {new Date(user.member_since).toLocaleDateString()}</p>
+                  <p><strong>Address:</strong> {user.address}</p>
+                  <p><strong>Description:</strong> {user.description}</p>
+                  <p><strong>Admin:</strong> {user.is_admin ? 'Yes' : 'No'}</p>
                   {hasLink && (
                     <div>
-                      <p><strong>Lien :</strong> Oui</p>
+                      <p><strong>Link:</strong> Oui</p>
                       <div>
-                        <p><strong>Note :</strong></p>
+                        <p><strong>Rate:</strong></p>
                         {/* Affichage des étoiles et gestion des clics */}
                         <div className="star-rating">
                           {[1, 2, 3, 4, 5].map((value) => (
@@ -177,17 +178,17 @@ function OtherProfile() {
                           ))}
                         </div>
                         <textarea
-                          placeholder="Ajouter un commentaire..."
+                          placeholder="Add a comment..."
                           value={comment}
                           onChange={(e) => setComment(e.target.value)}
                         />
-                        <button onClick={handleSubmitRating}>Soumettre l'évaluation</button>
+                        <button onClick={handleSubmitRating}>Submit Rating</button>
                       </div>
                     </div>
                   )}
                 </div>
               ) : (
-                <div>Chargement des données utilisateur...</div>
+                <div>Loading user data...</div>
               )}
             </div>
           </div>
