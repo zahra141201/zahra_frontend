@@ -99,7 +99,7 @@ function OtherProfile() {
       });
       alert('recherche de valoration faite', existingValorationResponse.data);
 
-      if (existingValorationResponse.status === 200 && existingValorationResponse.data.length > 0) {
+      if (existingValorationResponse.status === 200) {
         // S'il existe déjà une valoration, effectuer un PATCH
         const existingValorationId = existingValorationResponse.data[0].id;
         await axios.patch(`${URL_BACK}/valorations/${existingValorationId}`, {
