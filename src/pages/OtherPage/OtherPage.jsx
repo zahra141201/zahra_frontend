@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
-import URL_BACK from '../../../config';
 import NavBar2 from '../../components/NavBar2/NavBar2';
-import './OtherPage.css'; // Assurez-vous d'avoir votre fichier CSS pour le style
+import URL_BACK from '../../../config';
+import './OtherPage.css';
 
 function OtherProfile() {
   const [user, setUser] = useState(null);
-  const [rating, setRating] = useState(0); // État pour la notation (de 1 à 5)
-  const [comment, setComment] = useState(''); // État pour le commentaire
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
   const [hasLink, setHasLink] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
     const fetchUserData = async () => {
       const userEmail = location.state?.email;
-      if (!userEmail) {
-        return;
-      }
+      if (!userEmail) return;
 
       try {
         const response = await axios.get(`${URL_BACK}/users/${userEmail}`, {
@@ -29,18 +27,20 @@ function OtherProfile() {
 
         if (response.status === 200) {
           setUser(response.data);
-          checkLink(localStorage.getItem('email'), userEmail);
         } else {
-          alert('Failed to fetch user data:', response.statusText);
+          console.error('Failed to fetch user data:', response.statusText);
         }
       } catch (error) {
-        alert('Error fetching user data:', error);
+        console.error('Error fetching user data:', error);
       }
     };
 
+    fetchUserData();
+  }, [location.state?.email]);
+
+  useEffect(() => {
     const checkLink = async (loggedInEmail, profileEmail) => {
       try {
-        // Step 1: Fetch requests made by the logged-in user
         const requestsResponse = await axios.get(`${URL_BACK}/requests/user/${loggedInEmail}`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -50,8 +50,8 @@ function OtherProfile() {
 
         if (requestsResponse.status === 200) {
           const requests = requestsResponse.data;
+          let foundLink = false;
 
-          // Step 2: Check each request to see if it links to the profile user
           for (const request of requests) {
             const ingredientResponse = await axios.get(`${URL_BACK}/ingredientes/${request.id_ingrediente}`, {
               headers: {
@@ -63,11 +63,15 @@ function OtherProfile() {
             if (ingredientResponse.status === 200) {
               const ingredient = ingredientResponse.data;
               if (ingredient.owner === profileEmail) {
-                setHasLink(true);
-                break; // No need to check further if we already found a link
+                foundLink = true;
+                break;
               }
+            } else {
+              console.error('Failed to fetch ingredient:', ingredientResponse.statusText);
             }
           }
+
+          setHasLink(foundLink);
         } else {
           console.error('Failed to fetch requests:', requestsResponse.statusText);
         }
@@ -76,20 +80,20 @@ function OtherProfile() {
       }
     };
 
-    fetchUserData();
-  }, [location.state?.email]);
+    if (user && location.state?.email) {
+      checkLink(localStorage.getItem('email'), location.state.email);
+    }
+  }, [user, location.state?.email]);
 
   const handleStarClick = (value) => {
-    // Mettre à jour la notation en fonction de la valeur de l'étoile cliquée
     setRating(value);
   };
 
   const handleSubmitRating = async () => {
     try {
-      // Vérifier s'il existe déjà une valorisation faite par l'utilisateur connecté pour l'utilisateur visité
       const existingValorationResponse = await axios.get(`${URL_BACK}/valorations`, {
         params: {
-          email_user: user.email,
+          email_user: user?.email,
           made_by: localStorage.getItem('email')
         },
         headers: {
@@ -97,49 +101,15 @@ function OtherProfile() {
           'Content-Type': 'application/json'
         }
       });
-  
-      alert('User valorations: ' + JSON.stringify(existingValorationResponse));
-  
-      if (JSON.stringify(existingValorationResponse) !== 'null') {
-        // S'il existe déjà une valorisation, effectuer un PATCH
+
+      if (existingValorationResponse.status === 200 && existingValorationResponse.data && existingValorationResponse.data.length > 0) {
         const existingValorationId = existingValorationResponse.data[0].id;
-        const patchResponse = await axios.patch(`${URL_BACK}/valorations/${existingValorationId}`, {
-          puntuation: rating,
-          comment: comment,
-          email_user: user.email,
-          made_by: localStorage.getItem('email')
-        }, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json'
-          }
-        });
-  
-        console.log('Patch Response:', patchResponse);
-        alert('Rating updated successfully!');
+        await updateRating(existingValorationId);
       } else {
-        // S'il n'existe pas de valorisation, effectuer un POST pour créer une nouvelle valorisation
-        const postResponse = await axios.post(`${URL_BACK}/valorations`, {
-          puntuation: rating,
-          comment: comment,
-          email_user: user.email,
-          made_by: localStorage.getItem('email')
-        }, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json'
-          }
-        });
-  
-        console.log('Post Response:', postResponse);
-        if (postResponse.status === 201) {
-          alert('Rating submitted successfully!');
-        } else {
-          alert('Failed to submit rating:', postResponse.statusText);
-        }
+        await submitNewRating();
       }
-  
-      // Réinitialiser les états après soumission si nécessaire
+
+      // Reset states after submission
       setRating(0);
       setComment('');
     } catch (error) {
@@ -147,7 +117,54 @@ function OtherProfile() {
       alert('Error submitting rating:', error.message);
     }
   };
-  
+
+  const updateRating = async (valorationId) => {
+    try {
+      const patchResponse = await axios.patch(`${URL_BACK}/valorations/${valorationId}`, {
+        puntuation: rating,
+        comment: comment,
+        email_user: user?.email,
+        made_by: localStorage.getItem('email')
+      }, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log('Patch Response:', patchResponse);
+      alert('Rating updated successfully!');
+    } catch (error) {
+      console.error('Error updating rating:', error);
+      alert('Error updating rating:', error.message);
+    }
+  };
+
+  const submitNewRating = async () => {
+    try {
+      const postResponse = await axios.post(`${URL_BACK}/valorations`, {
+        puntuation: rating,
+        comment: comment,
+        email_user: user?.email,
+        made_by: localStorage.getItem('email')
+      }, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log('Post Response:', postResponse);
+      if (postResponse.status === 201) {
+        alert('Rating submitted successfully!');
+      } else {
+        alert('Failed to submit rating:', postResponse.statusText);
+      }
+    } catch (error) {
+      console.error('Error submitting rating:', error);
+      alert('Error submitting rating:', error.message);
+    }
+  };
 
   return (
     <div className='container-fluid p-0 landing-page'>
@@ -168,10 +185,9 @@ function OtherProfile() {
                   <p><strong>Admin:</strong> {user.is_admin ? 'Yes' : 'No'}</p>
                   {hasLink && (
                     <div>
-                      <p><strong>Link:</strong> Oui</p>
+                      <p><strong>Link:</strong> Yes</p>
                       <div>
                         <p><strong>Rate:</strong></p>
-                        {/* Affichage des étoiles et gestion des clics */}
                         <div className="star-rating">
                           {[1, 2, 3, 4, 5].map((value) => (
                             <span
