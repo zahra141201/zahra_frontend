@@ -101,8 +101,9 @@ function OtherProfile() {
           'Content-Type': 'application/json'
         }
       });
+      alert('User valorations: ' + JSON.stringify(existingValorationResponse));
 
-      if (existingValorationResponse.data.length > 0) {
+      if (existingValorationResponse.status === 200 && existingValorationResponse.data.length > 0) {
         const existingValorationId = existingValorationResponse.data[0].id;
         await updateRating(existingValorationId);
       } 
