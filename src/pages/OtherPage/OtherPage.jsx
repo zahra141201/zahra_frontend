@@ -86,27 +86,57 @@ function OtherProfile() {
 
   const handleSubmitRating = async () => {
     try {
-      // Envoi de la notation et du commentaire au serveur
-      const response = await axios.post(`${URL_BACK}/valorations`, {
-        puntuation: rating,
-        comment: comment,
-        email_user: user.email, // Email de l'utilisateur noté
-        made_by: localStorage.getItem('email') // Email de l'utilisateur connecté
-      }, {
+      // Vérifier s'il existe déjà une valoration faite par l'utilisateur connecté pour l'utilisateur visité
+      const existingValorationResponse = await axios.get(`${URL_BACK}/valorations`, {
+        params: {
+          email_user: user.email,
+          made_by: localStorage.getItem('email')
+        },
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'
         }
       });
 
-      if (response.status === 201) {
-        alert('Rating submitted successfully!');
-        // Réinitialiser les états après soumission si nécessaire
-        setRating(0);
-        setComment('');
+      if (existingValorationResponse.status === 200 && existingValorationResponse.data.length > 0) {
+        // S'il existe déjà une valoration, effectuer un PATCH
+        const existingValorationId = existingValorationResponse.data[0].id;
+        await axios.patch(`${URL_BACK}/valorations/${existingValorationId}`, {
+          puntuation: rating,
+          comment: comment,
+          email_user: user.email,
+          made_by: localStorage.getItem('email')
+        }, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        alert('Rating updated successfully!');
       } else {
-        alert('Failed to submit rating:', response.statusText);
+        // S'il n'existe pas de valoration, effectuer un POST pour créer une nouvelle valoration
+        const response = await axios.post(`${URL_BACK}/valorations`, {
+          puntuation: rating,
+          comment: comment,
+          email_user: user.email,
+          made_by: localStorage.getItem('email')
+        }, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.status === 201) {
+          alert('Rating submitted successfully!');
+        } else {
+          alert('Failed to submit rating:', response.statusText);
+        }
       }
+
+      // Réinitialiser les états après soumission si nécessaire
+      setRating(0);
+      setComment('');
     } catch (error) {
       console.error('Error submitting rating:', error);
       alert('Error submitting rating:', error.message);
