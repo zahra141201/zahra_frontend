@@ -8,6 +8,8 @@ import './OtherPage.css'; // Assurez-vous d'avoir votre fichier CSS pour le styl
 function OtherProfile() {
   const [user, setUser] = useState(null);
   const [hasLink, setHasLink] = useState(false);
+  const [rating, setRating] = useState(0); // État pour la notation par étoiles
+  const [comment, setComment] = useState(''); // État pour le commentaire
   const location = useLocation();
 
   useEffect(() => {
@@ -51,7 +53,7 @@ function OtherProfile() {
 
           // Step 2: Check each request to see if it links to the profile user
           for (const request of requests) {
-            const ingredientResponse = await axios.get(`${URL_BACK}/ingredientes/${request.id_ingrediente}`, {
+            const ingredientResponse = await axios.get(`${URL_BACK}/ingredients/${request.id_ingrediente}`, {
               headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json'
@@ -77,6 +79,42 @@ function OtherProfile() {
     fetchUserData();
   }, [location.state?.email]);
 
+  const handleRatingChange = (value) => {
+    setRating(value);
+  };
+
+  const handleCommentChange = (event) => {
+    setComment(event.target.value);
+  };
+
+  const handleSubmitRating = async () => {
+    try {
+      const loggedInEmail = localStorage.getItem('email');
+      const profileEmail = user.email; // Assuming user is fetched and available
+
+      const response = await axios.post(`${URL_BACK}/valorations`, {
+        comment,
+        puntuation: rating,
+        email_user: profileEmail,
+        made_by: loggedInEmail
+      }, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.status === 201) {
+        alert('Rating submitted successfully!');
+        // Optionally, you can update UI or handle success as needed
+      } else {
+        alert('Failed to submit rating:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error submitting rating:', error);
+    }
+  };
+
   return (
     <div className='container-fluid p-0 landing-page'>
       <NavBar2 />
@@ -94,7 +132,32 @@ function OtherProfile() {
                   <p><strong>Address:</strong> {user.address}</p>
                   <p><strong>Description:</strong> {user.description}</p>
                   <p><strong>Admin:</strong> {user.is_admin ? 'Yes' : 'No'}</p>
-                  {hasLink && <p><strong>Lien:</strong> Oui</p>}
+                  {/* Rating stars */}
+                  <div className="rating-stars">
+                    {[...Array(5)].map((_, index) => (
+                      <span
+                        key={index}
+                        className={index < rating ? 'filled' : 'empty'}
+                        onClick={() => handleRatingChange(index + 1)}
+                      >
+                        &#9733;
+                      </span>
+                    ))}
+                  </div>
+                  {/* Comment input */}
+                  <div>
+                    <label htmlFor="comment">Comment:</label>
+                    <textarea
+                      id="comment"
+                      name="comment"
+                      value={comment}
+                      onChange={handleCommentChange}
+                      rows={4}
+                      cols={50}
+                    />
+                  </div>
+                  {/* Submit button */}
+                  <button onClick={handleSubmitRating}>Submit Rating</button>
                 </div>
               ) : (
                 <div>Loading user data...</div>
