@@ -10,6 +10,7 @@ function OtherProfile() {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [hasLink, setHasLink] = useState(false);
+  const [existingRating, setExistingRating] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -27,6 +28,7 @@ function OtherProfile() {
 
         if (response.status === 200) {
           setUser(response.data);
+          fetchExistingRating(response.data.email);
         } else {
           console.error('Failed to fetch user data:', response.statusText);
         }
@@ -37,6 +39,29 @@ function OtherProfile() {
 
     fetchUserData();
   }, [location.state?.email]);
+
+  const fetchExistingRating = async (emailUser) => {
+    try {
+      const response = await axios.get(`${URL_BACK}/valorations`, {
+        params: {
+          email_user: emailUser,
+          made_by: localStorage.getItem('email')
+        },
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.status === 200 && response.data) {
+        setExistingRating(response.data);
+        setRating(response.data.puntuation);
+        setComment(response.data.comment);
+      }
+    } catch (error) {
+      console.error('Error fetching existing rating:', error);
+    }
+  };
 
   useEffect(() => {
     const checkLink = async (loggedInEmail, profileEmail) => {
@@ -91,21 +116,8 @@ function OtherProfile() {
 
   const handleSubmitRating = async () => {
     try {
-      const existingValorationResponse = await axios.get(`${URL_BACK}/valorations`, {
-        params: {
-          email_user: user?.email,
-          made_by: localStorage.getItem('email')
-        },
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      console.log(existingValorationResponse.data);
-
-      if (existingValorationResponse.status === 200 && existingValorationResponse.data && existingValorationResponse.data.id) {
-        const existingValorationId = existingValorationResponse.data.id;
-        await updateRating(existingValorationId);
+      if (existingRating) {
+        await updateRating(existingRating.id);
       } else {
         await submitNewRating();
       }
