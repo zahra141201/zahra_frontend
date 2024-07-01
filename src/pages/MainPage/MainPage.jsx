@@ -139,6 +139,9 @@ const MainPage = () => {
                     ...prevMarkers,
                     { lat: parseFloat(lat), lon: parseFloat(lon), isSearchResult: true }
                 ]);
+
+                // Clear user location marker
+                setUserLocation(null);
             } else {
                 console.log('Adresse non trouvée');
                 setMapCoordinates(null);
@@ -189,7 +192,7 @@ const MainPage = () => {
             </div>
             <div className="form-container">
                 <form className="d-flex" role="search" onSubmit={handleSearchSubmit}>
-                    <input className="form-control me-2" type="search" placeholder="Search a place" aria-label="Search" value={searchAddress} onChange={handleSearchChange} />
+                    <input className="form-control me-2" type="search" placeholder="Adresse" aria-label="Search" value={searchAddress} onChange={handleSearchChange} />
                     <button className="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>

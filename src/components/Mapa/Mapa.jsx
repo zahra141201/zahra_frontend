@@ -7,6 +7,7 @@ import userLocationIcon from './user-location-icon.png'; // Add an icon for user
 const Mapa = ({ height, width, coordinates, markers, userLocation }) => {
     const mapRef = useRef(null);
     const markerRefs = useRef([]);
+    const userMarkerRef = useRef(null); // Add ref for user marker
 
     useEffect(() => {
         if (!mapRef.current) {
@@ -25,9 +26,15 @@ const Mapa = ({ height, width, coordinates, markers, userLocation }) => {
         markerRefs.current.forEach(marker => mapRef.current.removeLayer(marker));
         markerRefs.current = [];
 
-        // Add user location marker if available
-        if (userLocation) {
-            const userMarker = L.marker([userLocation.lat, userLocation.lon], {
+        // Remove user location marker if coordinates are set
+        if (coordinates && userMarkerRef.current) {
+            mapRef.current.removeLayer(userMarkerRef.current);
+            userMarkerRef.current = null;
+        }
+
+        // Add user location marker if available and no search coordinates are set
+        if (userLocation && !coordinates) {
+            userMarkerRef.current = L.marker([userLocation.lat, userLocation.lon], {
                 icon: L.icon({
                     iconUrl: userLocationIcon,
                     iconSize: [32, 32],
@@ -35,7 +42,7 @@ const Mapa = ({ height, width, coordinates, markers, userLocation }) => {
                     popupAnchor: [0, -32]
                 })
             }).addTo(mapRef.current);
-            markerRefs.current.push(userMarker);
+            markerRefs.current.push(userMarkerRef.current);
         }
 
         // Add new markers
