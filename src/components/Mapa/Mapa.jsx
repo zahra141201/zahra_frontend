@@ -2,13 +2,14 @@ import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import markerIcon from './marker-icon.png';
-import userLocationIcon from './user-location-icon.png'; // Add an icon for user location
+import userLocationIcon from './user-location-icon.png'; // Icon for user location
 
-const Mapa = ({ height, width, coordinates, markers, userLocation }) => {
+const Mapa = ({ height, width, coordinates, markers, userLocation, searchedLocation }) => {
     const mapRef = useRef(null);
     const markerRefs = useRef([]);
 
     useEffect(() => {
+        // Initialize map if not already initialized
         if (!mapRef.current) {
             mapRef.current = L.map('map').setView([0, 0], 2);
 
@@ -17,6 +18,7 @@ const Mapa = ({ height, width, coordinates, markers, userLocation }) => {
             }).addTo(mapRef.current);
         }
 
+        // Set map view to coordinates if available
         if (coordinates) {
             mapRef.current.setView([coordinates.lat, coordinates.lon], 13);
         }
@@ -38,7 +40,20 @@ const Mapa = ({ height, width, coordinates, markers, userLocation }) => {
             markerRefs.current.push(userMarker);
         }
 
-        // Add new markers
+        // Add searched location marker if available
+        if (searchedLocation) {
+            const searchMarker = L.marker([searchedLocation.lat, searchedLocation.lon], {
+                icon: L.icon({
+                    iconUrl: markerIcon,
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 32],
+                    popupAnchor: [0, -32]
+                })
+            }).addTo(mapRef.current);
+            markerRefs.current.push(searchMarker);
+        }
+
+        // Add other markers
         markers.forEach(marker => {
             const newMarker = L.marker([marker.lat, marker.lon], {
                 icon: L.icon({
@@ -50,7 +65,7 @@ const Mapa = ({ height, width, coordinates, markers, userLocation }) => {
             }).addTo(mapRef.current);
             markerRefs.current.push(newMarker);
         });
-    }, [coordinates, markers, userLocation]);
+    }, [coordinates, markers, userLocation, searchedLocation]);
 
     return <div id="map" style={{ height, width }} />;
 };

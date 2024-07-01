@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useNavigate } from 'react-router-dom';
 import './MainPage.css';
 import NavBar2 from '../../components/NavBar2/NavBar2';
 import Mapa from '../../components/Mapa/Mapa';
@@ -13,7 +12,6 @@ import geolib from 'geolib';
 const MainPage = () => {
     const location = useLocation();
     const email = location.state?.email || '';
-    const navigate = useNavigate();
 
     const [nightMode, setNightMode] = useState(() => {
         const storedValue = localStorage.getItem('nightMode');
