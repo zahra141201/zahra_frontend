@@ -24,7 +24,6 @@ const MainPage = () => {
     const [searchAddress, setSearchAddress] = useState('');
     const [mapCoordinates, setMapCoordinates] = useState(null);
     const [markers, setMarkers] = useState([]);
-    const [userLocation, setUserLocation] = useState(null);
 
     const toggleNightMode = () => {
         const newNightMode = !nightMode;
@@ -73,25 +72,7 @@ const MainPage = () => {
             }
         };
 
-        const fetchUserLocation = () => {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const { latitude, longitude } = position.coords;
-                        setUserLocation({ lat: latitude, lon: longitude });
-                        setMapCoordinates({ lat: latitude, lon: longitude });
-                    },
-                    (error) => {
-                        console.error('Error fetching user location:', error);
-                    }
-                );
-            } else {
-                console.error('Geolocation is not supported by this browser.');
-            }
-        };
-
         fetchData();
-        fetchUserLocation();
     }, []);
 
     const handleProfileClick = (email) => {
@@ -135,13 +116,13 @@ const MainPage = () => {
                 setSearchResults(sortedResults);
 
                 // Add the search result marker
-                setMarkers(prevMarkers => [
-                    ...prevMarkers,
-                    { lat: parseFloat(lat), lon: parseFloat(lon), isSearchResult: true }
+                setMarkers([
+                    ...sortedResults.map(result => ({
+                        lat: result.coordinates.latitude,
+                        lon: result.coordinates.longitude,
+                        isSearchResult: true
+                    }))
                 ]);
-
-                // Clear user location marker
-                setUserLocation(null);
             } else {
                 console.log('Adresse non trouvée');
                 setMapCoordinates(null);
@@ -160,7 +141,7 @@ const MainPage = () => {
             <h1>¡Bienvenido {email}!</h1>
             <div className="d-flex justify-content-center align-items-start">
                 <NightMode nightMode={nightMode} toggleNightMode={toggleNightMode} />
-                <Mapa height="400px" width="100%" coordinates={mapCoordinates} markers={markers} userLocation={userLocation} />
+                <Mapa height="400px" width="100%" coordinates={mapCoordinates} markers={markers} />
                 <div className="search-container">
                     <div className="scrollspy-example bg-body-tertiary p-3 rounded-2" tabIndex="0">
                         <table className="table table-striped">

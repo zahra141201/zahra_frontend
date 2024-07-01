@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import markerIcon from './marker-icon.png';
 import userLocationIcon from './user-location-icon.png'; // Add an icon for user location
 
-const Mapa = ({ height, width, coordinates, markers, userLocation }) => {
+const Mapa = ({ height, width, coordinates, markers }) => {
     const mapRef = useRef(null);
     const markerRefs = useRef([]);
     const userMarkerRef = useRef(null); // Add ref for user marker
@@ -33,16 +33,29 @@ const Mapa = ({ height, width, coordinates, markers, userLocation }) => {
         }
 
         // Add user location marker if available and no search coordinates are set
-        if (userLocation && !coordinates) {
-            userMarkerRef.current = L.marker([userLocation.lat, userLocation.lon], {
-                icon: L.icon({
-                    iconUrl: userLocationIcon,
-                    iconSize: [32, 32],
-                    iconAnchor: [16, 32],
-                    popupAnchor: [0, -32]
-                })
-            }).addTo(mapRef.current);
-            markerRefs.current.push(userMarkerRef.current);
+        if (!coordinates && userMarkerRef.current === null) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const { latitude, longitude } = position.coords;
+                        const userMarker = L.marker([latitude, longitude], {
+                            icon: L.icon({
+                                iconUrl: userLocationIcon,
+                                iconSize: [32, 32],
+                                iconAnchor: [16, 32],
+                                popupAnchor: [0, -32]
+                            })
+                        }).addTo(mapRef.current);
+                        userMarkerRef.current = userMarker;
+                        markerRefs.current.push(userMarker);
+                    },
+                    (error) => {
+                        console.error('Error fetching user location:', error);
+                    }
+                );
+            } else {
+                console.error('Geolocation is not supported by this browser.');
+            }
         }
 
         // Add new markers
@@ -58,7 +71,7 @@ const Mapa = ({ height, width, coordinates, markers, userLocation }) => {
             }).addTo(mapRef.current);
             markerRefs.current.push(newMarker);
         });
-    }, [coordinates, markers, userLocation]);
+    }, [coordinates, markers]);
 
     return <div id="map" style={{ height, width }} />;
 };
