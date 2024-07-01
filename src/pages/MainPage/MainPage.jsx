@@ -77,13 +77,19 @@ const MainPage = () => {
 
     const handleSearchSubmit = async (event) => {
         event.preventDefault();
-        if (!searchAddress) return;
+        if (!searchAddress) {
+            console.log('Adresse vide');
+            return;
+        }
 
         try {
-            // Utilisez ici un service de géocodage pour convertir l'adresse en coordonnées
+            console.log('Recherche en cours pour :', searchAddress);
             const response = await axios.get(`https://nominatim.openstreetmap.org/search?q=${searchAddress}&format=json`);
+            console.log('Réponse de la recherche :', response);
+
             if (response.data && response.data.length > 0) {
                 const { lat, lon } = response.data[0];
+                console.log('Coordonnées trouvées :', { lat, lon });
                 setMapCoordinates({ lat, lon });
             } else {
                 console.log('Adresse non trouvée');
