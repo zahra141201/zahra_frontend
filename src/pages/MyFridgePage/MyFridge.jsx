@@ -36,7 +36,6 @@ function MyFridgePage() {
             response.data.forEach(ingredient => fetchRequestsForIngredient(ingredient.id));
         } catch (error) {
             console.error('Error fetching ingredients:', error);
-            
         }
     };
 
@@ -49,7 +48,6 @@ function MyFridgePage() {
             }));
         } catch (error) {
             console.error('Error fetching requests:', error);
-      
         }
     };
 
@@ -78,9 +76,9 @@ function MyFridgePage() {
             await axios.delete(`${URL_BACK}/ingredientes/${ingredientId}`);
             const updatedIngredients = userIngredients.filter(ingredient => ingredient.id !== ingredientId);
             setUserIngredients(updatedIngredients);
+            window.location.reload(); // Rafraîchit la page après suppression
         } catch (error) {
             console.error('Error deleting ingredient:', error);
-      
         }
     };
 
@@ -109,7 +107,6 @@ function MyFridgePage() {
             }));
         } catch (error) {
             console.error('Error updating request status:', error);
-     
         }
     };
 
