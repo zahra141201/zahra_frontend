@@ -25,6 +25,7 @@ const MainPage = () => {
     const [mapCoordinates, setMapCoordinates] = useState(null);
     const [markers, setMarkers] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
+    const [searchedLocation, setSearchedLocation] = useState(null);
 
     const toggleNightMode = () => {
         const newNightMode = !nightMode;
@@ -79,7 +80,10 @@ const MainPage = () => {
                     (position) => {
                         const { latitude, longitude } = position.coords;
                         setUserLocation({ lat: latitude, lon: longitude });
-                        setMapCoordinates({ lat: latitude, lon: longitude });
+                        // Only set map coordinates initially when user location is fetched
+                        if (!mapCoordinates) {
+                            setMapCoordinates({ lat: latitude, lon: longitude });
+                        }
                     },
                     (error) => {
                         console.error('Error fetching user location:', error);
@@ -120,9 +124,10 @@ const MainPage = () => {
             console.log('Réponse de la recherche :', response);
 
             if (response.data && response.data.length > 0) {
-                const { lat, lon } = response.data[0];
+                const { lat, lon, display_name } = response.data[0];
                 console.log('Coordonnées trouvées :', { lat, lon });
                 setMapCoordinates({ lat: parseFloat(lat), lon: parseFloat(lon) });
+                setSearchedLocation({ lat: parseFloat(lat), lon: parseFloat(lon), name: display_name });
 
                 const sortedResults = searchResults.map(result => ({
                     ...result,
@@ -133,15 +138,21 @@ const MainPage = () => {
                 })).sort((a, b) => a.distance - b.distance);
 
                 setSearchResults(sortedResults);
+                // Clear user location marker when searching for an address
+                setUserLocation(null);
             } else {
                 console.log('Adresse non trouvée');
                 setMapCoordinates(null);
                 setSearchResults([]);
+                // Clear user location marker when searching for an address
+                setUserLocation(null);
             }
         } catch (error) {
             console.error('Error fetching coordinates:', error);
             setMapCoordinates(null);
             setSearchResults([]);
+            // Clear user location marker when searching for an address
+            setUserLocation(null);
         }
     };
 
@@ -151,7 +162,7 @@ const MainPage = () => {
             <h1>¡Bienvenido {email}!</h1>
             <div className="d-flex justify-content-center align-items-start">
                 <NightMode nightMode={nightMode} toggleNightMode={toggleNightMode} />
-                <Mapa height="400px" width="100%" coordinates={mapCoordinates} markers={markers} userLocation={userLocation} />
+                <Mapa height="400px" width="100%" coordinates={mapCoordinates} markers={markers} userLocation={userLocation} searchedLocation={searchedLocation} />
                 <div className="search-container">
                     <div className="scrollspy-example bg-body-tertiary p-3 rounded-2" tabIndex="0">
                         <table className="table table-striped">
