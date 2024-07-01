@@ -142,7 +142,7 @@ const MainPage = () => {
                                         <td onClick={() => handleProfileClick(result.email)} style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue' }}>
                                             {result.name}
                                         </td>
-                                        <td>{result.direccion}</td>
+                                        <td>{result.address}</td>
                                         <td>{result.productos ? result.productos.join(', ') : '-'}</td>
                                         <td>
                                             <button className="btn btn-primary" onClick={() => handleFridgeClick(result.email)}>Check My Fridge!</button>
