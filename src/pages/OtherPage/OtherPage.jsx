@@ -128,7 +128,6 @@ function OtherProfile() {
       fetchExistingRating(user.email);  // Fetch the updated rating
     } catch (error) {
       console.error('Error submitting rating:', error);
-
     }
   };
 
@@ -147,10 +146,8 @@ function OtherProfile() {
       });
 
       console.log('Patch Response:', patchResponse);
-
     } catch (error) {
       console.error('Error updating rating:', error);
-
     }
   };
 
@@ -172,11 +169,33 @@ function OtherProfile() {
       if (postResponse.status === 201) {
         fetchExistingRating(user.email);  // Fetch the updated rating
       } else {
-
+        console.error('Failed to submit rating:', postResponse.statusText);
       }
     } catch (error) {
       console.error('Error submitting rating:', error);
+    }
+  };
 
+  const handleDeleteRating = async () => {
+    try {
+      const deleteResponse = await axios.delete(`${URL_BACK}/user/${localStorage.getItem('email')}/ingredient/${existingRating.id_ingrediente}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (deleteResponse.status === 204) {
+        setRating(0);
+        setComment('');
+        setExistingRating(null);
+        alert('Rating deleted successfully!');
+      } else {
+        console.error('Failed to delete rating:', deleteResponse.statusText);
+      }
+    } catch (error) {
+      console.error('Error deleting rating:', error);
+      alert('Error deleting rating:', error.message);
     }
   };
 
@@ -219,6 +238,7 @@ function OtherProfile() {
                           onChange={(e) => setComment(e.target.value)}
                         />
                         <button onClick={handleSubmitRating}>Submit Rating</button>
+                        {existingRating && <button onClick={handleDeleteRating}>Delete Rating</button>}
                       </div>
                     </div>
                   )}
