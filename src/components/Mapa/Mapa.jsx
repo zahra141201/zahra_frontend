@@ -40,9 +40,10 @@ const Mapa = ({ height, width, coordinates, markers, userLocation }) => {
 
         // Add new markers
         markers.forEach(marker => {
+            const iconUrl = marker.isSearchResult ? userLocationIcon : markerIcon; // Use userLocationIcon for search result markers
             const newMarker = L.marker([marker.lat, marker.lon], {
                 icon: L.icon({
-                    iconUrl: markerIcon,
+                    iconUrl: iconUrl,
                     iconSize: [32, 32],
                     iconAnchor: [16, 32],
                     popupAnchor: [0, -32]

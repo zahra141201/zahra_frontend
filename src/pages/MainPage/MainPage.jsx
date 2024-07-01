@@ -133,6 +133,12 @@ const MainPage = () => {
                 })).sort((a, b) => a.distance - b.distance);
 
                 setSearchResults(sortedResults);
+
+                // Add the search result marker
+                setMarkers(prevMarkers => [
+                    ...prevMarkers,
+                    { lat: parseFloat(lat), lon: parseFloat(lon), isSearchResult: true }
+                ]);
             } else {
                 console.log('Adresse non trouvée');
                 setMapCoordinates(null);
