@@ -8,6 +8,7 @@ import Mapa from '../../components/Mapa/Mapa';
 import NightMode from '../../components/NightMode/NightMode';
 import axios from 'axios';
 import URL_BACK from '../../../config';
+import geolib from 'geolib';
 
 const MainPage = () => {
     const location = useLocation();
@@ -50,7 +51,8 @@ const MainPage = () => {
                         name: user.name,
                         direccion: user.address,
                         productos: ingredients.filter(ingredient => ingredient.owner === user.email).map(ingredient => ingredient.name),
-                        email: user.email
+                        email: user.email,
+                        coordinates: { latitude: user.lat, longitude: user.lon } // Ajoute les coordonnées ici
                     };
                 });
 
@@ -91,6 +93,14 @@ const MainPage = () => {
                 const { lat, lon } = response.data[0];
                 console.log('Coordonnées trouvées :', { lat, lon });
                 setMapCoordinates({ lat, lon });
+
+                // Calcul des distances par rapport à l'adresse recherchée
+                const sortedResults = [...searchResults].map(result => ({
+                    ...result,
+                    distance: geolib.getDistance({ latitude: lat, longitude: lon }, result.coordinates)
+                })).sort((a, b) => a.distance - b.distance);
+
+                setSearchResults(sortedResults);
             } else {
                 console.log('Adresse non trouvée');
                 setMapCoordinates(null);
