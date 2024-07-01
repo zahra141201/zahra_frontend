@@ -1,82 +1,126 @@
-.Mapa {
-    margin-right: 10px; 
-  }
-  
-.search-container {
-margin-left: 150px;
-margin-top: 60px;
-height: 350px; 
-overflow-y: auto; 
-background-color: #cabc99;
-}
- 
-.search-card-name {
-    color: red; 
-}
+/* MainPage.css */
 
-.search-card-direccion {
-    color: black; 
-}
-.container-mapa {
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #ffffff;
-    max-width: 600px;
-}
-
-
-.list-group-item {
-    border: none; 
-    padding: 10px 0; 
-}
-
-.form-container {
+/* Container styles */
+.main-container {
     display: flex;
-    justify-content: center; 
-    margin-top: 20px; 
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
 }
 
-.form-control {
+/* Header styles */
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* Night mode toggle button */
+.night-mode-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+/* Map container */
+.map-container {
+    width: 100%;
+    max-width: 1200px; /* Adjust max-width as needed */
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Search container */
+.search-container {
+    width: 100%;
+    max-width: 600px; /* Adjust max-width as needed */
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.search-container form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-container input[type="search"] {
+    flex: 1;
     margin-right: 10px;
-}
-.dark-mode {
-    filter: invert(1) hue-rotate(180deg);
-}
-
-.list-group-item:hover {
-    transform: scale(1.1); /* Aumentar el tamaño al pasar el cursor */
-    transition: transform 0.3s ease; /* Animación suave */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra para resaltar */
-}
-/* En NightMode.css */
-.night-mode-container.active {
-    border: 2px solid #333; /* Color de borde resaltado */
-}
-/* Animación de palpitar */
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
-/* Estilo para el botón del formulario de búsqueda */
-.btn-outline-success {
-    transition: background-color 0.3s ease, color 0.3s ease;
-    border-radius: 10px;
-    animation: pulse 2s infinite; /* Aplicar la animación */
+.search-container button[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
 }
 
-/* Efecto al pasar el cursor sobre el botón */
-.btn-outline-success:hover {
+.search-container button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Results table */
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.results-table th, .results-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.results-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.results-table td {
+    font-size: 16px;
+}
+
+.results-table td button {
+    padding: 8px 16px;
     background-color: #28a745;
     color: #fff;
-    animation: none; /* Detener la animación al pasar el cursor */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
 }
 
-/* Efecto al hacer clic en el botón */
-.btn-outline-success:active {
+.results-table td button:hover {
     background-color: #218838;
-    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .main-container {
+        padding: 10px;
+    }
+    
+    .search-container {
+        padding: 10px;
+    }
+    
+    .results-table {
+        font-size: 14px;
+    }
 }
