@@ -33,24 +33,34 @@ const MainPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Récupération des utilisateurs et de leurs adresses depuis le backend
-                const usersResponse = await axios.get(`${URL_BACK}/users`, {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
+                const [usersResponse, ingredientsResponse] = await Promise.all([
+                    axios.get(`${URL_BACK}/users`, {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                            'Content-Type': 'application/json'
+                        }
+                    }),
+                    axios.get(`${URL_BACK}/ingredientes`)
+                ]);
 
                 const users = usersResponse.data;
+                const ingredients = ingredientsResponse.data;
+
+                console.log('Users data:', users); // Ajout du console.log pour inspecter les données des utilisateurs
+                console.log('Ingredients data:', ingredients); // Ajout du console.log pour inspecter les données des ingrédients
 
                 // Géocodage des adresses des utilisateurs pour obtenir leurs coordonnées
                 const promises = users.map(async (user) => {
                     const address = user.address;
                     const response = await axios.get(`https://nominatim.openstreetmap.org/search?q=${address}&format=json`);
                     const { lat, lon } = response.data[0]; // Supposant que le premier résultat est le bon
+
                     return {
                         ...user,
-                        coordinates: { latitude: parseFloat(lat), longitude: parseFloat(lon) }
+                        coordinates: { latitude: parseFloat(lat), longitude: parseFloat(lon) },
+                        productos: ingredients
+                            .filter(ingredient => ingredient.owner === user.email)
+                            .map(ingredient => ingredient.name)
                     };
                 });
 
