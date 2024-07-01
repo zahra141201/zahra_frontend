@@ -57,8 +57,7 @@ const MainPage = () => {
                 // Attendre que toutes les promesses de géocodage soient résolues
                 const results = await Promise.all(promises);
 
-                // Afficher les utilisateurs dès le début et trier par défaut par nom
-                setSearchResults(results.sort((a, b) => (a.name > b.name) ? 1 : -1));
+                setSearchResults(results);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -144,7 +143,7 @@ const MainPage = () => {
                                             {result.name}
                                         </td>
                                         <td>{result.direccion}</td>
-                                        <td>{result.productos.join(', ')}</td>
+                                        <td>{result.productos ? result.productos.join(', ') : '-'}</td>
                                         <td>
                                             <button className="btn btn-primary" onClick={() => handleFridgeClick(result.email)}>Check My Fridge!</button>
                                         </td>
