@@ -44,7 +44,7 @@ const Mapa = ({ height, width, coordinates, markers, userLocation, searchedLocat
         if (searchedLocation) {
             const searchMarker = L.marker([searchedLocation.lat, searchedLocation.lon], {
                 icon: L.icon({
-                    iconUrl: markerIcon,
+                    iconUrl: userLocationIcon, // Use userLocationIcon for searched location
                     iconSize: [32, 32],
                     iconAnchor: [16, 32],
                     popupAnchor: [0, -32]
