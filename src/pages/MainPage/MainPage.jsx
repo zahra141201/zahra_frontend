@@ -57,8 +57,8 @@ const MainPage = () => {
                 // Attendre que toutes les promesses de géocodage soient résolues
                 const results = await Promise.all(promises);
 
-                // Afficher les utilisateurs dès le début
-                setSearchResults(results);
+                // Afficher les utilisateurs dès le début et trier par défaut par nom
+                setSearchResults(results.sort((a, b) => (a.name > b.name) ? 1 : -1));
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
