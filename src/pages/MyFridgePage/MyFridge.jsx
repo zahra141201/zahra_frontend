@@ -74,9 +74,7 @@ function MyFridgePage() {
     const handleDeleteIngredient = async (ingredientId) => {
         try {
             await axios.delete(`${URL_BACK}/ingredientes/${ingredientId}`);
-            const updatedIngredients = userIngredients.filter(ingredient => ingredient.id !== ingredientId);
-            setUserIngredients(updatedIngredients);
-            window.location.reload(); // Rafraîchit la page après suppression
+            setUserIngredients(prevIngredients => prevIngredients.filter(ingredient => ingredient.id !== ingredientId));
         } catch (error) {
             console.error('Error deleting ingredient:', error);
         }
@@ -132,8 +130,8 @@ function MyFridgePage() {
                                         ) : (
                                             <IngredientCard
                                                 ingredient={ingredient}
-                                                onDelete={handleDeleteIngredient}
-                                                onUpdate={handleEditIngredient}
+                                                onDelete={() => handleDeleteIngredient(ingredient.id)} // Passer la fonction directement
+                                                onUpdate={() => handleEditIngredient(ingredient.id)} // Passer la fonction directement
                                             />
                                         )}
                                         <div className="requests">
