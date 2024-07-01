@@ -101,14 +101,14 @@ function OtherProfile() {
           'Content-Type': 'application/json'
         }
       });
-      console.log(existingValorationResponse.data.length);
-      console.log(existingValorationResponse.status === 200);
       console.log(existingValorationResponse.data);
 
-      if (existingValorationResponse.status === 200 && existingValorationResponse.data.length > 0) {
-        const existingValorationId = existingValorationResponse.data[0].id;
+      if (existingValorationResponse.status === 200 && existingValorationResponse.data && existingValorationResponse.data.id) {
+        const existingValorationId = existingValorationResponse.data.id;
         await updateRating(existingValorationId);
-      } 
+      } else {
+        await submitNewRating();
+      }
 
       // Reset states after submission
       setRating(0);
