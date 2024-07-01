@@ -36,7 +36,7 @@ function MyFridgePage() {
             response.data.forEach(ingredient => fetchRequestsForIngredient(ingredient.id));
         } catch (error) {
             console.error('Error fetching ingredients:', error);
-            alert('Error fetching ingredients:', error.message);
+            
         }
     };
 
@@ -49,7 +49,7 @@ function MyFridgePage() {
             }));
         } catch (error) {
             console.error('Error fetching requests:', error);
-            alert('Error fetching requests:', error.message);
+      
         }
     };
 
@@ -80,7 +80,7 @@ function MyFridgePage() {
             setUserIngredients(updatedIngredients);
         } catch (error) {
             console.error('Error deleting ingredient:', error);
-            alert('Error deleting ingredient:', error.message);
+      
         }
     };
 
@@ -109,7 +109,7 @@ function MyFridgePage() {
             }));
         } catch (error) {
             console.error('Error updating request status:', error);
-            alert('Error updating request status:', error.message);
+     
         }
     };
 

@@ -31,10 +31,10 @@ function Profile() {
           setUpdatedUser(response.data); // Initialise updatedUser avec les données de l'utilisateur
           fetchValorations(userEmail);
         } else {
-          alert('Failed to fetch user data:', response.statusText);
+         
         }
       } catch (error) {
-        alert('Error fetching user data:', error);
+       
       }
     };
 
@@ -52,7 +52,7 @@ function Profile() {
       setAverageRating(average.toFixed(1)); // Arrondi à une décimale
     } catch (error) {
       console.error('Error fetching valorations:', error);
-      alert('Error fetching valorations:', error.message);
+    
     }
   };
 
@@ -74,7 +74,7 @@ function Profile() {
         handleLogout();
       }
     } catch (error) {
-      alert('Error deleting user email:', error);
+      
     }
   };
 
@@ -109,10 +109,10 @@ function Profile() {
         setUser(updatedUser); // Met à jour l'état utilisateur avec les nouvelles données
         setIsEditing(false); // Sortir du mode édition
       } else {
-        alert('Failed to update user data:', response.statusText);
+       
       }
     } catch (error) {
-      alert('Error updating user data:', error);
+    
     }
   };
 
