@@ -79,36 +79,44 @@ const MainPage = () => {
 
     const handleSearchSubmit = async (event) => {
         event.preventDefault();
-        if (!searchAddress) {
-            console.log('Adresse vide');
-            return;
-        }
-
+    
         try {
+            if (!searchAddress) {
+                console.log('Adresse vide');
+                return;
+            }
+    
             console.log('Recherche en cours pour :', searchAddress);
             const response = await axios.get(`https://nominatim.openstreetmap.org/search?q=${searchAddress}&format=json`);
             console.log('Réponse de la recherche :', response);
-
+    
             if (response.data && response.data.length > 0) {
                 const { lat, lon } = response.data[0];
                 console.log('Coordonnées trouvées :', { lat, lon });
-                setMapCoordinates({ lat, lon });
-
+                setMapCoordinates({ lat: parseFloat(lat), lon: parseFloat(lon) });
+    
                 // Calcul des distances par rapport à l'adresse recherchée
-                const sortedResults = [...searchResults].map(result => ({
+                const sortedResults = searchResults.map(result => ({
                     ...result,
-                    distance: geolib.getDistance({ latitude: lat, longitude: lon }, result.coordinates)
+                    distance: geolib.getDistance(
+                        { latitude: parseFloat(lat), longitude: parseFloat(lon) },
+                        { latitude: parseFloat(result.coordinates.latitude), longitude: parseFloat(result.coordinates.longitude) }
+                    )
                 })).sort((a, b) => a.distance - b.distance);
-
+    
                 setSearchResults(sortedResults);
             } else {
                 console.log('Adresse non trouvée');
                 setMapCoordinates(null);
+                setSearchResults([]);
             }
         } catch (error) {
             console.error('Error fetching coordinates:', error);
+            setMapCoordinates(null);
+            setSearchResults([]);
         }
     };
+    
 
     return (
         <div className={nightMode ? 'dark-mode' : ''}>
