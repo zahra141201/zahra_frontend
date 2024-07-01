@@ -15,46 +15,7 @@ const NavBar2 = () => {
     }
   };
 
-  const handleDeleteUser = async () => {
-    try {
-      alert("zahra");
-
-      // Récupérer le token depuis le localStorage
-      const token = localStorage.getItem('token');
-      if (!token) {
-        return;
-      }
-
-      try {
-        alert("coucou");
-        const response = await axios.get(`${URL_BACK}users/login/token`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        });
-
-        if (response.status === 200) {
-          
-          const emaildelete = response.data.email;
-          alert(emaildelete);
-
-          // Utilisez la bonne URL avec /deleteByEmail
-          const deleteResponse = await axios.delete(`${URL_BACK}users/deleteByEmail/${emaildelete}`);
-          if (deleteResponse.status === 204) {
-            // Déconnexion de l'utilisateur après la suppression
-            handleLogout();
-          }
-        } else {
-          alert('Failed to fetch user email:', response.statusText);
-        }
-      } catch (error) {
-        alert('Error fetching user email:', error);
-      }
-    } catch (error) {
-      console.error('Error deleting user:', error);
-    }
-  };
+  
 
   const handleLogoutClick = () => {
     handleLogout();
@@ -83,11 +44,9 @@ const NavBar2 = () => {
             <Link to="/Profile" className="nav-link">My Profile</Link>
           </li>
           <li className="nav-item">
-            <Link to="/valorationspage" className="nav-link">See Ranking</Link>
-          </li>
-          <li className="nav-item">
             <a className="nav-link" href="/" onClick={handleLogoutClick}>Log out</a>
           </li>
+          
         </ul>
       </div>
     </nav>

@@ -56,6 +56,42 @@ function Profile() {
     }
   };
 
+  const handleDeleteUser = async () => {
+    try {
+
+      // Récupérer le token depuis le localStorage
+      const userEmail = localStorage.getItem('email');
+      if (!userEmail) {
+        return;
+      }
+
+      try {
+
+
+
+          // Utilisez la bonne URL avec /deleteByEmail
+          const deleteResponse = await axios.delete(`${URL_BACK}users/deleteByEmail/${userEmail}`);
+          if (deleteResponse.status === 204) {
+            // Déconnexion de l'utilisateur après la suppression
+            handleLogout();
+          }
+        
+      } catch (error) {
+        alert('Error deleting user email:', error);
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      localStorage.removeItem('token');
+    } catch (error) {
+      console.error('Erreur lors de la déconnexion :', error.message);
+    }
+  };
+
   const handleModifyClick = () => {
     setIsEditing(true);
   };
@@ -136,6 +172,9 @@ function Profile() {
                     <p><strong>Admin:</strong> {user.is_admin ? 'Yes' : 'No'}</p>
                     <p><strong>Average Rating:</strong> {averageRating}</p>
                     <button onClick={handleModifyClick} className="btn btn-secondary">Modify</button>
+                    <li className="nav-item">
+                         <a className="nav-link" href="/" onClick={handleDeleteUser}>Delete My Account</a>
+                    </li>
                   </div>
                 )
               ) : (
