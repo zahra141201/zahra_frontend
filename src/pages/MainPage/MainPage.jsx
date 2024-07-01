@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './MainPage.css'; // Importe le fichier CSS avec les styles ajoutés
+import './MainPage.css';
 import NavBar2 from '../../components/NavBar2/NavBar2';
 import Mapa from '../../components/Mapa/Mapa';
 import NightMode from '../../components/NightMode/NightMode';
@@ -156,40 +156,46 @@ const MainPage = () => {
     };
 
     return (
-        <div className={`main-container ${nightMode ? 'dark-mode' : ''}`}>
+        <div className={nightMode ? 'dark-mode' : ''}>
             <NavBar2 />
-            <h1 className="header">¡Bienvenido {email}!</h1>
-            <NightMode nightMode={nightMode} toggleNightMode={toggleNightMode} />
-            <div className="map-container">
+            <h1>¡Bienvenido {email}!</h1>
+            <div className="d-flex justify-content-center align-items-start">
+                <NightMode nightMode={nightMode} toggleNightMode={toggleNightMode} />
                 <Mapa height="400px" width="100%" coordinates={mapCoordinates} markers={markers} userLocation={userLocation} searchedLocation={searchedLocation} currentUserEmail={email} />
+                <div className="search-container">
+                    <div className="scrollspy-example bg-body-tertiary p-3 rounded-2" tabIndex="0">
+                        <table className="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Adresse</th>
+                                    <th>Produits</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {searchResults.map((result, index) => (
+                                    <tr key={index}>
+                                        <td onClick={() => handleProfileClick(result.email)} style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue' }}>
+                                            {result.name}
+                                        </td>
+                                        <td>{result.address}</td>
+                                        <td>{result.productos ? result.productos.join(', ') : '-'}</td>
+                                        <td>
+                                            <button className="btn btn-primary" onClick={() => handleFridgeClick(result.email)}>Check My Fridge!</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div className="search-container">
+            <div className="form-container">
                 <form className="d-flex" role="search" onSubmit={handleSearchSubmit}>
                     <input className="form-control me-2" type="search" placeholder="Search a place" aria-label="Search" value={searchAddress} onChange={handleSearchChange} />
                     <button className="btn btn-outline-success" type="submit">Search</button>
                 </form>
-            </div>
-            <div className="results-container">
-                <table className="results-table">
-                    <thead>
-                        <tr>
-                            <th>Nom</th>
-                            <th>Adresse</th>
-                            <th>Produits</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {searchResults.map((result, index) => (
-                            <tr key={index}>
-                                <td onClick={() => handleProfileClick(result.email)}>{result.name}</td>
-                                <td>{result.address}</td>
-                                <td>{result.productos ? result.productos.join(', ') : '-'}</td>
-                                <td><button className="btn btn-primary" onClick={() => handleFridgeClick(result.email)}>Check My Fridge!</button></td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
             </div>
         </div>
     );
