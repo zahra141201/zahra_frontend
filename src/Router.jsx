@@ -8,7 +8,6 @@ import InstructionsPage from './pages/InstructionsPage/InstructionsPage';
 import ProfilePage from './pages/ProfilePage/Profile';
 import MyFridgePage from './pages/MyFridgePage/MyFridge';
 import AddIngredientPage from './pages/AddIngredientpage/AddIngredient'
-import Valorationpage from './pages/ValorationPage/ValorationPage';
 import protected_UserCheck from './protected/UserCheck'
 import OtherPage from './pages/OtherPage/OtherPage';
 import OtherFridge from './pages/OtherFridge/OtherFridge';
@@ -25,7 +24,6 @@ function Router(){
         <Route path={"/DocsPage"} element={<InstructionsPage />}/>
         <Route path={"/Profile"} element={<ProfilePage />}/>
         <Route path={"/MyFridge"} element={<MyFridgePage />}/>
-        <Route path={"/valorationspage"} element={<Valorationpage />}/>
         <Route path={"/AddIngredient"} element={<AddIngredientPage />}/>
         <Route path={"/OtherPage"} element={<OtherPage />}/>
         <Route path={"/OtherFridge"} element={<OtherFridge />}/>
