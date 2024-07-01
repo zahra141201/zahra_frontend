@@ -23,6 +23,7 @@ const MainPage = () => {
     const [searchResults, setSearchResults] = useState([]);
     const [searchAddress, setSearchAddress] = useState('');
     const [mapCoordinates, setMapCoordinates] = useState(null);
+    const [markers, setMarkers] = useState([]);
 
     const toggleNightMode = () => {
         const newNightMode = !nightMode;
@@ -46,14 +47,13 @@ const MainPage = () => {
                 const users = usersResponse.data;
                 const ingredients = ingredientsResponse.data;
 
-                console.log('Users data:', users); // Ajout du console.log pour inspecter les données des utilisateurs
-                console.log('Ingredients data:', ingredients); // Ajout du console.log pour inspecter les données des ingrédients
+                console.log('Users data:', users);
+                console.log('Ingredients data:', ingredients);
 
-                // Géocodage des adresses des utilisateurs pour obtenir leurs coordonnées
                 const promises = users.map(async (user) => {
                     const address = user.address;
                     const response = await axios.get(`https://nominatim.openstreetmap.org/search?q=${address}&format=json`);
-                    const { lat, lon } = response.data[0]; // Supposant que le premier résultat est le bon
+                    const { lat, lon } = response.data[0];
 
                     return {
                         ...user,
@@ -64,10 +64,9 @@ const MainPage = () => {
                     };
                 });
 
-                // Attendre que toutes les promesses de géocodage soient résolues
                 const results = await Promise.all(promises);
-
                 setSearchResults(results);
+                setMarkers(results.map(result => ({ lat: result.coordinates.latitude, lon: result.coordinates.longitude })));
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -106,7 +105,6 @@ const MainPage = () => {
                 console.log('Coordonnées trouvées :', { lat, lon });
                 setMapCoordinates({ lat: parseFloat(lat), lon: parseFloat(lon) });
 
-                // Calcul des distances par rapport à l'adresse recherchée
                 const sortedResults = searchResults.map(result => ({
                     ...result,
                     distance: geolib.getDistance(
@@ -134,7 +132,7 @@ const MainPage = () => {
             <h1>¡Bienvenido {email}!</h1>
             <div className="d-flex justify-content-center align-items-start">
                 <NightMode nightMode={nightMode} toggleNightMode={toggleNightMode} />
-                <Mapa height="400px" width="100%" coordinates={mapCoordinates} />
+                <Mapa height="400px" width="100%" coordinates={mapCoordinates} markers={markers} />
                 <div className="search-container">
                     <div className="scrollspy-example bg-body-tertiary p-3 rounded-2" tabIndex="0">
                         <table className="table table-striped">
