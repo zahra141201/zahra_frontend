@@ -125,6 +125,7 @@ function OtherProfile() {
       // Reset states after submission
       setRating(0);
       setComment('');
+      fetchExistingRating(user.email);  // Fetch the updated rating
     } catch (error) {
       console.error('Error submitting rating:', error);
       alert('Error submitting rating:', error.message);
@@ -170,6 +171,7 @@ function OtherProfile() {
       console.log('Post Response:', postResponse);
       if (postResponse.status === 201) {
         alert('Rating submitted successfully!');
+        fetchExistingRating(user.email);  // Fetch the updated rating
       } else {
         alert('Failed to submit rating:', postResponse.statusText);
       }
