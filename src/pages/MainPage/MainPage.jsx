@@ -24,6 +24,7 @@ const MainPage = () => {
     const [searchAddress, setSearchAddress] = useState('');
     const [mapCoordinates, setMapCoordinates] = useState(null);
     const [markers, setMarkers] = useState([]);
+    const [userLocation, setUserLocation] = useState(null);
 
     const toggleNightMode = () => {
         const newNightMode = !nightMode;
@@ -72,7 +73,25 @@ const MainPage = () => {
             }
         };
 
+        const fetchUserLocation = () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const { latitude, longitude } = position.coords;
+                        setUserLocation({ lat: latitude, lon: longitude });
+                        setMapCoordinates({ lat: latitude, lon: longitude });
+                    },
+                    (error) => {
+                        console.error('Error fetching user location:', error);
+                    }
+                );
+            } else {
+                console.error('Geolocation is not supported by this browser.');
+            }
+        };
+
         fetchData();
+        fetchUserLocation();
     }, []);
 
     const handleProfileClick = (email) => {

@@ -5,6 +5,7 @@ import markerIcon from './marker-icon.png';
 
 const Mapa = ({ height, width, coordinates, markers }) => {
     const mapRef = useRef(null);
+    const markerRefs = useRef([]);
 
     useEffect(() => {
         if (!mapRef.current) {
@@ -19,8 +20,13 @@ const Mapa = ({ height, width, coordinates, markers }) => {
             mapRef.current.setView([coordinates.lat, coordinates.lon], 13);
         }
 
+        // Clear previous markers
+        markerRefs.current.forEach(marker => mapRef.current.removeLayer(marker));
+        markerRefs.current = [];
+
+        // Add new markers
         markers.forEach(marker => {
-            L.marker([marker.lat, marker.lon], {
+            const newMarker = L.marker([marker.lat, marker.lon], {
                 icon: L.icon({
                     iconUrl: markerIcon,
                     iconSize: [32, 32],
@@ -28,6 +34,7 @@ const Mapa = ({ height, width, coordinates, markers }) => {
                     popupAnchor: [0, -32]
                 })
             }).addTo(mapRef.current);
+            markerRefs.current.push(newMarker);
         });
     }, [coordinates, markers]);
 
