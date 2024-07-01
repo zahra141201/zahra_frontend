@@ -178,7 +178,7 @@ function OtherProfile() {
 
   const handleDeleteRating = async () => {
     try {
-      const deleteResponse = await axios.delete(`${URL_BACK}/user/${localStorage.getItem('email')}`, {
+      const deleteResponse = await axios.delete(`${URL_BACK}/valorations/user/${localStorage.getItem('email')}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'
