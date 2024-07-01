@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MainPage.css';
 import NavBar2 from '../../components/NavBar2/NavBar2';
@@ -11,6 +11,7 @@ import geolib from 'geolib';
 
 const MainPage = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const email = location.state?.email || '';
 
     const [nightMode, setNightMode] = useState(() => {
@@ -44,8 +45,8 @@ const MainPage = () => {
                     axios.get(`${URL_BACK}/ingredientes`)
                 ]);
 
-                const users = usersResponse.data;
-                const ingredients = ingredientsResponse.data;
+                const users = usersResponse.data.filter(user => user.email !== email); // Filter out current user
+                const ingredients = ingredientsResponse.data.filter(ingredient => ingredient.owner !== email); // Filter out ingredients owned by current user
 
                 console.log('Users data:', users);
                 console.log('Ingredients data:', ingredients);
@@ -94,7 +95,7 @@ const MainPage = () => {
 
         fetchData();
         fetchUserLocation();
-    }, []);
+    }, [email]); // Include email in dependencies to fetch new data when email changes
 
     const handleProfileClick = (email) => {
         navigate('/OtherPage', { state: { email } });
@@ -160,7 +161,7 @@ const MainPage = () => {
             <h1>¡Bienvenido {email}!</h1>
             <div className="d-flex justify-content-center align-items-start">
                 <NightMode nightMode={nightMode} toggleNightMode={toggleNightMode} />
-                <Mapa height="400px" width="100%" coordinates={mapCoordinates} markers={markers} userLocation={userLocation} searchedLocation={searchedLocation} />
+                <Mapa height="400px" width="100%" coordinates={mapCoordinates} markers={markers} userLocation={userLocation} searchedLocation={searchedLocation} currentUserEmail={email} />
                 <div className="search-container">
                     <div className="scrollspy-example bg-body-tertiary p-3 rounded-2" tabIndex="0">
                         <table className="table table-striped">
