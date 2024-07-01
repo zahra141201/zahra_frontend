@@ -122,8 +122,8 @@ function OtherProfile() {
   const updateRating = async (valorationId) => {
     try {
       const patchResponse = await axios.patch(`${URL_BACK}/valorations/${valorationId}`, {
-        puntuation: rating,
         comment: comment,
+        puntuation: rating,
         email_user: user?.email,
         made_by: localStorage.getItem('email')
       }, {
