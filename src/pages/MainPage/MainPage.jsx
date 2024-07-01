@@ -33,28 +33,29 @@ const MainPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [usersResponse, ingredientsResponse] = await Promise.all([
-                    axios.get(`${URL_BACK}/users`, {
-                        headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                            'Content-Type': 'application/json'
-                        }
-                    }),
-                    axios.get(`${URL_BACK}/ingredientes`)
-                ]);
+                // Récupération des utilisateurs et de leurs adresses depuis le backend
+                const usersResponse = await axios.get(`${URL_BACK}/users`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
 
                 const users = usersResponse.data;
-                const ingredients = ingredientsResponse.data;
 
-                const results = users.map(user => {
+                // Géocodage des adresses des utilisateurs pour obtenir leurs coordonnées
+                const promises = users.map(async (user) => {
+                    const address = user.address;
+                    const response = await axios.get(`https://nominatim.openstreetmap.org/search?q=${address}&format=json`);
+                    const { lat, lon } = response.data[0]; // Supposant que le premier résultat est le bon
                     return {
-                        name: user.name,
-                        direccion: user.address,
-                        productos: ingredients.filter(ingredient => ingredient.owner === user.email).map(ingredient => ingredient.name),
-                        email: user.email,
-                        coordinates: { latitude: user.lat, longitude: user.lon } // Ajoute les coordonnées ici
+                        ...user,
+                        coordinates: { latitude: parseFloat(lat), longitude: parseFloat(lon) }
                     };
                 });
+
+                // Attendre que toutes les promesses de géocodage soient résolues
+                const results = await Promise.all(promises);
 
                 setSearchResults(results);
             } catch (error) {
@@ -79,22 +80,22 @@ const MainPage = () => {
 
     const handleSearchSubmit = async (event) => {
         event.preventDefault();
-    
+
         try {
             if (!searchAddress) {
                 console.log('Adresse vide');
                 return;
             }
-    
+
             console.log('Recherche en cours pour :', searchAddress);
             const response = await axios.get(`https://nominatim.openstreetmap.org/search?q=${searchAddress}&format=json`);
             console.log('Réponse de la recherche :', response);
-    
+
             if (response.data && response.data.length > 0) {
                 const { lat, lon } = response.data[0];
                 console.log('Coordonnées trouvées :', { lat, lon });
                 setMapCoordinates({ lat: parseFloat(lat), lon: parseFloat(lon) });
-    
+
                 // Calcul des distances par rapport à l'adresse recherchée
                 const sortedResults = searchResults.map(result => ({
                     ...result,
@@ -103,7 +104,7 @@ const MainPage = () => {
                         { latitude: parseFloat(result.coordinates.latitude), longitude: parseFloat(result.coordinates.longitude) }
                     )
                 })).sort((a, b) => a.distance - b.distance);
-    
+
                 setSearchResults(sortedResults);
             } else {
                 console.log('Adresse non trouvée');
@@ -116,7 +117,6 @@ const MainPage = () => {
             setSearchResults([]);
         }
     };
-    
 
     return (
         <div className={nightMode ? 'dark-mode' : ''}>
