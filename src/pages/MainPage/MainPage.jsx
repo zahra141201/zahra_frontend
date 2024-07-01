@@ -106,7 +106,7 @@ const MainPage = () => {
             <h1>¡Bienvenido {email}!</h1>
             <div className="d-flex justify-content-center align-items-start">
                 <NightMode nightMode={nightMode} toggleNightMode={toggleNightMode} />
-                <Mapa height="200px" width="300px" className="Mapa" coordinates={mapCoordinates} />
+                <Mapa height="400px" width="100%" coordinates={mapCoordinates} />
                 <div className="search-container">
                     <div className="scrollspy-example bg-body-tertiary p-3 rounded-2" tabIndex="0">
                         <table className="table table-striped">
