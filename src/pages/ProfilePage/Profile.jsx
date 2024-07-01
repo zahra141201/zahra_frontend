@@ -70,7 +70,12 @@ function Profile() {
 
 
           // Utilisez la bonne URL avec /deleteByEmail
-          const deleteResponse = await axios.delete(`${URL_BACK}/users/deleteByEmail/${userEmail}`);
+          const deleteResponse = await axios.delete(`${URL_BACK}/users/deleteByEmail/${userEmail}`, {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`,
+              'Content-Type': 'application/json'
+            }
+          });
           if (deleteResponse.status === 204) {
             // Déconnexion de l'utilisateur après la suppression
             handleLogout();
