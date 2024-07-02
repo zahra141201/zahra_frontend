@@ -13,10 +13,11 @@ function OtherProfile() {
   const [existingRating, setExistingRating] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const isAdmin = localStorage.getItem('is_admin')
  
 
   useEffect(() => {
-    const isAdmin = localStorage.getItem('is_admin')
+    
     console.log('est ce que c est un admin', isAdmin)
     const fetchUserData = async () => {
       const userEmail = location.state?.email;
