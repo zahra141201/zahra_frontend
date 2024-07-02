@@ -280,14 +280,12 @@ function OtherProfile() {
                         />
                         <button onClick={handleSubmitRating}>Submit Rating</button>
                         {existingRating && <button onClick={handleDeleteRating}>Delete Rating</button>}
+                        {isAdmin && 
+                    <button onClick={handleDeleteAccount} className="btn btn-danger mt-3">Delete Account</button>}
                       </div>
                     </div>
                   )}
-                  {isAdmin && (
-                    <div>
-                      <button onClick={handleDeleteAccount} className="btn btn-danger mt-3">Delete Account</button>
-                    </div>
-                  )}
+                  
                 </div>
               ) : (
                 <div>Loading user data...</div>
