@@ -41,6 +41,7 @@ const LogInForm = () => {
 
       ///Línea extra
       localStorage.setItem('email', email);
+      localStorage.setItem('role', user.role);
 
       console.log(response);
 

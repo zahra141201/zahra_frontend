@@ -16,6 +16,7 @@ const SignUpForm = () => {
   const [address, setAddress] = useState('');
   const [description, setDescription] = useState('');
   const [password, setPassword] = useState('');
+  const [adminPassword, setAdminPassword] = useState('');
   const [name, setName] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(() => {
     const savedVisibility = localStorage.getItem('passwordVisible');
@@ -32,6 +33,10 @@ const SignUpForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // Vérification du mot de passe administrateur
+    const isAdmin = adminPassword === 'ABCD';
+
     axios.post(`${URL_BACK}/signup`, {
       email,
       password,
@@ -40,7 +45,7 @@ const SignUpForm = () => {
       member_since: new Date(),
       address: address,
       description,
-      is_admin: false,
+      is_admin: isAdmin, // Définir is_admin en fonction de l'adminPassword
     }).then((response) => {
       console.log('Registro exitoso ahora puedes volver y loguearte');
       setError('');
@@ -144,6 +149,19 @@ const SignUpForm = () => {
         <span className="input-group-text" onClick={togglePasswordVisibility} style={{ cursor: 'pointer' }}>
           {passwordVisible ? '👁' : '👁❌'}
         </span>
+      </div>
+      <div className="input-group mb-3">
+        <span className="input-group-text" id="basic-addon1">Admin Password</span>
+        <input 
+          type="password" 
+          className="form-control" 
+          id="adminPassword" 
+          placeholder="Admin Password" 
+          aria-label="Admin Password" 
+          aria-describedby="basic-addon1" 
+          value={adminPassword}
+          onChange={(e) => setAdminPassword(e.target.value)}
+        />
       </div>
       <div className="text-center">
         <button className="btn btn-custom" type="submit">Enviar</button>
