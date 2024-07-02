@@ -257,7 +257,10 @@ function OtherProfile() {
                   <p><strong>Address:</strong> {user.address}</p>
                   <p><strong>Description:</strong> {user.description}</p>
                   <p><strong>Admin:</strong> {user.is_admin ? 'Yes' : 'No'}</p>
-                  {isAdmin && (<button onClick={handleDeleteAccount} className="btn btn-danger mt-3">Delete Account</button>)}
+                  {isAdmin === 'true' && (
+  <button onClick={handleDeleteAccount} className="btn btn-danger mt-3">Delete Account</button>
+)}
+
                   {hasLink && (
                     <div>
                       <p><strong>Link:</strong> Yes</p>
