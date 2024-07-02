@@ -41,7 +41,7 @@ const LogInForm = () => {
       setToken(access_token);
 
       localStorage.setItem('email', user.email);
-      localStorage.setItem('isAdmin', user.isAdmin); // Assurez-vous que l'information d'admin est incluse dans la réponse
+      localStorage.setItem('is_admin', user.is_admin); // Assurez-vous que l'information d'admin est incluse dans la réponse
 
       console.log(response);
 
