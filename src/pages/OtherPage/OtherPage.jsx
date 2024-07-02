@@ -16,6 +16,7 @@ function OtherProfile() {
   const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
 
   useEffect(() => {
+    console.log(isAdmin)
     const fetchUserData = async () => {
       const userEmail = location.state?.email;
       console.log('User email from location state:', userEmail);
