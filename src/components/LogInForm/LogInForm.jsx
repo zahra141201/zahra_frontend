@@ -37,16 +37,16 @@ const LogInForm = () => {
       setMsg(`¡Bienvenido ${email}!`);
 
       const access_token = response.data.access_token;
+      const user = response.data.user; // Obtenez les informations de l'utilisateur depuis la réponse
       setToken(access_token);
 
-      ///Línea extra
-      localStorage.setItem('email', email);
-      localStorage.setItem('role', user.role);
+      localStorage.setItem('email', user.email);
+      localStorage.setItem('isAdmin', user.isAdmin); // Assurez-vous que l'information d'admin est incluse dans la réponse
 
       console.log(response);
 
-      // Redirigir a la página principal y pasar el email
-      navigate('/mainpage', { state: { email } });
+      // Rediriger à la page principale et passer l'email
+      navigate('/mainpage', { state: { email: user.email } });
 
     }).catch((error) => {
       console.log("bloque catch");
@@ -54,8 +54,6 @@ const LogInForm = () => {
       console.log(error);
     });
   };
-
-
 
   return (
     <form onSubmit={handleSubmit} className='container-signUPform'>
