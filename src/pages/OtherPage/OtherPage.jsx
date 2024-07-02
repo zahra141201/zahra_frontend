@@ -13,7 +13,7 @@ function OtherProfile() {
   const [existingRating, setExistingRating] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
-  const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
+  const isAdmin = localStorage.getItem('isAdmin')
 
   useEffect(() => {
     console.log(isAdmin)
