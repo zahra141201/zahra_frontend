@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NavBar2 from '../../components/NavBar2/NavBar2';
 import URL_BACK from '../../../config';
@@ -12,6 +12,8 @@ function OtherProfile() {
   const [hasLink, setHasLink] = useState(false);
   const [existingRating, setExistingRating] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
+  const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -199,6 +201,27 @@ function OtherProfile() {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    try {
+      const deleteResponse = await axios.delete(`${URL_BACK}/deleteByEmail/${user.email}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (deleteResponse.status === 204) {
+        alert('Account deleted successfully!');
+        navigate('/mainpage');
+      } else {
+        console.error('Failed to delete account:', deleteResponse.statusText);
+      }
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      alert('Error deleting account:', error.message);
+    }
+  };
+
   return (
     <div className='container-fluid p-0 landing-page'>
       <NavBar2 />
@@ -240,6 +263,11 @@ function OtherProfile() {
                         <button onClick={handleSubmitRating}>Submit Rating</button>
                         {existingRating && <button onClick={handleDeleteRating}>Delete Rating</button>}
                       </div>
+                    </div>
+                  )}
+                  {isAdmin && (
+                    <div>
+                      <button onClick={handleDeleteAccount} className="btn btn-danger mt-3">Delete Account</button>
                     </div>
                   )}
                 </div>
