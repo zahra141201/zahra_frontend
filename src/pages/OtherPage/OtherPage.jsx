@@ -221,7 +221,7 @@ function OtherProfile() {
   const handleDeleteAccount = async () => {
     console.log('Deleting account for user:', user.email);
     try {
-      const deleteResponse = await axios.delete(`${URL_BACK}/deleteByEmail/${user.email}`, {
+      const deleteResponse = await axios.delete(`${URL_BACK}/users/deleteByEmail/${user.email}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'
