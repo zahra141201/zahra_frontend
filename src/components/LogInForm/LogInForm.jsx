@@ -42,6 +42,9 @@ const LogInForm = () => {
 
       localStorage.setItem('email', user.email);
       localStorage.setItem('is_admin', user.is_admin); // Assurez-vous que l'information d'admin est incluse dans la réponse
+      const isAdmin = localStorage.getItem('is_admin')
+      console.log('est ce que c est un admin', isAdmin)
+
 
       console.log(response);
 
