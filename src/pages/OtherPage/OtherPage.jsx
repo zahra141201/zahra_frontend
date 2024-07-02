@@ -16,7 +16,7 @@ function OtherProfile() {
  
 
   useEffect(() => {
-    const isAdmin = localStorage.getItem('isAdmin')
+    const isAdmin = localStorage.getItem('is_admin')
     console.log('est ce que c est un admin', isAdmin)
     const fetchUserData = async () => {
       const userEmail = location.state?.email;
