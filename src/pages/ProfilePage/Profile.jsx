@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import io from 'socket.io-client'; // Importer socket.io-client
 import URL_BACK from '../../../config';
 import NavBar2 from '../../components/NavBar2/NavBar2';
 import './Profile.css'; // Supposant que vous avez du CSS pour le style
-
-const socket = io.connect('http://localhost:3001'); // Remplacez par l'URL de votre serveur WebSocket
 
 function Profile() {
   const [user, setUser] = useState(null);
@@ -42,18 +39,6 @@ function Profile() {
     };
 
     fetchUser();
-  }, []);
-
-  useEffect(() => {
-    socket.on('userUpdate', (updatedUserData) => {
-      setUser(updatedUserData);
-      setUpdatedUser(updatedUserData);
-      fetchValorations(updatedUserData.email);
-    });
-
-    return () => {
-      socket.disconnect();
-    };
   }, []);
 
   const fetchValorations = async (email) => {
@@ -123,7 +108,6 @@ function Profile() {
       if (response.status === 200) {
         setUser(updatedUser); // Met à jour l'état utilisateur avec les nouvelles données
         setIsEditing(false); // Sortir du mode édition
-        socket.emit('updateUserData', updatedUser); // Envoyer les nouvelles données à tous les clients WebSocket
       } else {
        
       }
