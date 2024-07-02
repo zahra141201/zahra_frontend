@@ -18,6 +18,7 @@ function OtherProfile() {
   useEffect(() => {
     const fetchUserData = async () => {
       const userEmail = location.state?.email;
+      console.log('User email from location state:', userEmail);
       if (!userEmail) return;
 
       try {
@@ -29,6 +30,7 @@ function OtherProfile() {
         });
 
         if (response.status === 200) {
+          console.log('User data fetched:', response.data);
           setUser(response.data);
           fetchExistingRating(response.data.email);
         } else {
@@ -43,6 +45,7 @@ function OtherProfile() {
   }, [location.state?.email]);
 
   const fetchExistingRating = async (emailUser) => {
+    console.log('Fetching existing rating for user:', emailUser);
     try {
       const response = await axios.get(`${URL_BACK}/valorations`, {
         params: {
@@ -56,6 +59,7 @@ function OtherProfile() {
       });
 
       if (response.status === 200 && response.data) {
+        console.log('Existing rating data:', response.data);
         setExistingRating(response.data);
         setRating(response.data.puntuation);
         setComment(response.data.comment);
@@ -67,6 +71,7 @@ function OtherProfile() {
 
   useEffect(() => {
     const checkLink = async (loggedInEmail, profileEmail) => {
+      console.log('Checking link for user:', loggedInEmail, 'and profile:', profileEmail);
       try {
         const requestsResponse = await axios.get(`${URL_BACK}/requests/user/${loggedInEmail}`, {
           headers: {
@@ -78,6 +83,7 @@ function OtherProfile() {
         if (requestsResponse.status === 200) {
           const requests = requestsResponse.data;
           let foundLink = false;
+          console.log('Requests data:', requests);
 
           for (const request of requests) {
             const ingredientResponse = await axios.get(`${URL_BACK}/ingredientes/${request.id_ingrediente}`, {
@@ -89,6 +95,7 @@ function OtherProfile() {
 
             if (ingredientResponse.status === 200) {
               const ingredient = ingredientResponse.data;
+              console.log('Ingredient data:', ingredient);
               if (ingredient.owner === profileEmail) {
                 foundLink = true;
                 break;
@@ -113,14 +120,18 @@ function OtherProfile() {
   }, [user, location.state?.email]);
 
   const handleStarClick = (value) => {
+    console.log('Star clicked with value:', value);
     setRating(value);
   };
 
   const handleSubmitRating = async () => {
+    console.log('Submitting rating:', rating, 'with comment:', comment);
     try {
       if (existingRating) {
+        console.log('Updating existing rating:', existingRating.id);
         await updateRating(existingRating.id);
       } else {
+        console.log('Submitting new rating');
         await submitNewRating();
       }
 
@@ -134,6 +145,7 @@ function OtherProfile() {
   };
 
   const updateRating = async (valorationId) => {
+    console.log('Updating rating with id:', valorationId);
     try {
       const patchResponse = await axios.patch(`${URL_BACK}/valorations/${valorationId}`, {
         comment: comment,
@@ -154,6 +166,7 @@ function OtherProfile() {
   };
 
   const submitNewRating = async () => {
+    console.log('Submitting new rating with rating:', rating, 'and comment:', comment);
     try {
       const postResponse = await axios.post(`${URL_BACK}/valorations`, {
         puntuation: rating,
@@ -179,6 +192,7 @@ function OtherProfile() {
   };
 
   const handleDeleteRating = async () => {
+    console.log('Deleting rating for user:', localStorage.getItem('email'));
     try {
       const deleteResponse = await axios.delete(`${URL_BACK}/valorations/user/${localStorage.getItem('email')}`, {
         headers: {
@@ -202,6 +216,7 @@ function OtherProfile() {
   };
 
   const handleDeleteAccount = async () => {
+    console.log('Deleting account for user:', user.email);
     try {
       const deleteResponse = await axios.delete(`${URL_BACK}/deleteByEmail/${user.email}`, {
         headers: {
